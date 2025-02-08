@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Dusza_WPF
 {
@@ -18,7 +20,7 @@ namespace Dusza_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<Button> gepek = [];
+        ObservableCollection<Button> gepek = new ObservableCollection<Button>();
         public MainWindow()
         {
             InitializeComponent();
@@ -51,27 +53,6 @@ namespace Dusza_WPF
                 DragDrop.DoDragDrop(button, button, DragDropEffects.Move);
         }
 
-        private void Canvas_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetData(typeof(Button)) is Button button)
-            {
-                if (gepek.Contains(button))
-                    gepek.Remove(button);
-                    lvGepek.ItemsSource = null;
-                    //lvGepek.ItemsSource=gepek;
-
-
-                if (!cKlaszter.Children.Contains(button))
-                    cKlaszter.Children.Add(button);
-
-                Point dropPosition = e.GetPosition(cKlaszter);
-                Canvas.SetLeft(button, dropPosition.X);
-                Canvas.SetTop(button, dropPosition.Y);
-
-                button.PreviewMouseMove -= Button_PreviewMouseMove;
-                button.PreviewMouseMove += CanvasButton_PreviewMouseMove;
-            }
-        }
 
         private void CanvasButton_PreviewMouseMove(object sender, MouseEventArgs e)
         {
@@ -81,16 +62,40 @@ namespace Dusza_WPF
 
         private void ListView_DragOver(object sender, DragEventArgs e) => e.Effects = DragDropEffects.Move;
 
+        private void Canvas_Drop(object sender, DragEventArgs e)
+        {
+
+            if (e.Data.GetData(typeof(Button)) is Button button)
+            {
+                gepek.Remove(button);
+                if (VisualTreeHelper.GetParent(button) is ContentPresenter currentParent)
+                    currentParent.Content = null;
+
+
+                Point dropPosition = e.GetPosition(sender as Canvas);
+                Canvas.SetLeft(button, dropPosition.X);
+                Canvas.SetTop(button, dropPosition.Y);
+
+
+                if (sender is Canvas canvas && !canvas.Children.Contains(button))
+                    canvas.Children.Add(button);
+
+                button.PreviewMouseMove -= Button_PreviewMouseMove;
+                button.PreviewMouseMove += CanvasButton_PreviewMouseMove;
+            }
+        }
+
         private void ListView_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetData(typeof(Button)) is Button button)
             {
-                if (!lvGepek.Items.Contains(button))
-                    gepek.Add(button);
 
-                cKlaszter.Children.Remove(button); // Remove from Canvas
+                gepek.Add(button);
+                cKlaszter.Children.Remove(button);
+
+
                 button.PreviewMouseMove -= CanvasButton_PreviewMouseMove;
-                button.PreviewMouseMove += Button_PreviewMouseMove; // Restore original drag event
+                button.PreviewMouseMove += Button_PreviewMouseMove;
             }
         }
     }

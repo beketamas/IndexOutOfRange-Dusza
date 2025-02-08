@@ -33,11 +33,20 @@
                   Drop="ListView_Drop"
                   Background="LightGray">
         </ListView>
+        <!--<Canvas Grid.Column="0" Grid.Row="1" x:Name="cKlaszter1"
+                Drop="Canvas_Drop"
+                AllowDrop="True"
+                Background="Gray">
+            <Button Width="50" Height="50" PreviewMouseMove="CanvasButton_PreviewMouseMove"></Button>
+            
+        </Canvas>-->
         <Canvas Grid.Column="1" Grid.Row="1" x:Name="cKlaszter"
                 Drop="Canvas_Drop"
                 AllowDrop="True"
                 Background="LightGreen">
-            <Button Width="50" Height="50" PreviewMouseMove="CanvasButton_PreviewMouseMove"></Button>
+            <!--<Button Width="50" Height="50" PreviewMouseMove="CanvasButton_PreviewMouseMove"></Button>
+            -->
         </Canvas>
+        
     </Grid>
 </Window>
