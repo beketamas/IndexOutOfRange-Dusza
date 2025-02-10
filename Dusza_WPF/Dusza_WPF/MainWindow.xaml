@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dusza_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="900" Width="1500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -24,6 +24,12 @@
                FontSize="50"
                VerticalContentAlignment="Center"
                HorizontalContentAlignment="Center">Klaszter</Label>
+
+        <!--<Button VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                Width="80"
+                Height="80"
+                FontSize="20">Betoltés</Button>-->
         
         <ListView Grid.Column="0" Grid.Row="1" x:Name="lvGepek"
                   HorizontalContentAlignment="Center"
@@ -33,19 +39,17 @@
                   Drop="ListView_Drop"
                   Background="LightGray">
         </ListView>
-        <!--<Canvas Grid.Column="0" Grid.Row="1" x:Name="cKlaszter1"
-                Drop="Canvas_Drop"
-                AllowDrop="True"
-                Background="Gray">
-            <Button Width="50" Height="50" PreviewMouseMove="CanvasButton_PreviewMouseMove"></Button>
-            
-        </Canvas>-->
+
         <Canvas Grid.Column="1" Grid.Row="1" x:Name="cKlaszter"
                 Drop="Canvas_Drop"
                 AllowDrop="True"
                 Background="LightGreen">
-            <!--<Button Width="50" Height="50" PreviewMouseMove="CanvasButton_PreviewMouseMove"></Button>
-            -->
+            <Button Width="100" Height="100" Content=": D"
+                    FontSize="50"
+                    VerticalContentAlignment="Center"
+                    HorizontalContentAlignment="Center" 
+                    Canvas.Left="325" Canvas.Top="318"
+                    x:Name="btnCenter"></Button>
         </Canvas>
         
     </Grid>
