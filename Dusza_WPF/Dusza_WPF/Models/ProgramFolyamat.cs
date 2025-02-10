@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuszaProg_IndexOutOfRange
 {
-    internal class ProgramFolyamat
+    public class ProgramFolyamat
     {
         DateTime inidtasIdeje;
         string isActive;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuszaProg_IndexOutOfRange
 {
-    internal class Kluszter
+    public class Kluszter
     {
         string programName;
         int mennyiActive;

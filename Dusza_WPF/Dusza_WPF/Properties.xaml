@@ -1,0 +1,133 @@
+﻿<Window x:Class="Dusza_WPF.Properties"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dusza_WPF"
+        mc:Ignorable="d"
+        Title="Properties" Height="500" Width="450">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--#region -->
+        <Label
+               Grid.Column="0"
+               HorizontalContentAlignment="Left"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="Név:">
+        </Label>
+        <Label
+               Grid.Column="0"
+               Grid.Row="1"
+               HorizontalContentAlignment="Left"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="Elérés:">
+        </Label>
+        <Label
+               Grid.Column="0"
+               Grid.Row="2"
+               HorizontalContentAlignment="Left"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="Millimag:">
+        </Label>
+        <Label
+               Grid.Column="0"
+               Grid.Row="3"
+               HorizontalContentAlignment="Left"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="Memória:">
+        </Label>
+        <Label Grid.Row="3"
+               VerticalAlignment="Top"
+               Height="34"
+               Content="Programok"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center" Margin="0,97,0,0"
+               Grid.RowSpan="2"
+               FontSize="15">
+
+        </Label>
+        <ComboBox Grid.Row="4"
+                 Height="30"
+                 Width="140"
+                 x:Name="cbProgramok"
+                 VerticalAlignment="Center"
+                  Margin="0 20 0 0"
+                  FontSize="15"
+                  >
+        </ComboBox>
+        <!--#endregion-->
+
+
+        <!--#region-->
+        <Label x:Name="lbGepNEv"
+               Grid.Column="1"
+               HorizontalContentAlignment="Right"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="">
+
+        </Label>
+        <Label x:Name="lbGepEleres"
+               Grid.Column="1"
+               Grid.Row="1"
+               HorizontalContentAlignment="Right"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Height="50"
+               FontSize="15"
+               Content="">
+
+        </Label>
+        <Label x:Name="lbGepMillimag"
+              Grid.Column="1"
+              Grid.Row="2"
+              HorizontalContentAlignment="Right"
+              VerticalContentAlignment="Center"
+              Width="100"
+              Height="50"
+              FontSize="15"
+              Content="">
+
+        </Label>
+        <Label x:Name="lbGepMemoria"
+              Grid.Column="1"
+              Grid.Row="3"
+              HorizontalContentAlignment="Right"
+              VerticalContentAlignment="Center"
+              Width="100"
+              Height="50"
+              FontSize="15"
+              Content="">
+
+        </Label>
+
+
+
+        <!--#endregion-->
+    </Grid>
+</Window>

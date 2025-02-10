@@ -44,12 +44,13 @@
                 Drop="Canvas_Drop"
                 AllowDrop="True"
                 Background="LightGreen">
-            <Button Width="100" Height="100" Content=": D"
+            <Button Width="100" Height="100"
                     FontSize="50"
                     VerticalContentAlignment="Center"
                     HorizontalContentAlignment="Center" 
                     Canvas.Left="325" Canvas.Top="318"
-                    x:Name="btnCenter"></Button>
+                    x:Name="btnCenter"
+                    Background="Red"></Button>
         </Canvas>
         
     </Grid>
