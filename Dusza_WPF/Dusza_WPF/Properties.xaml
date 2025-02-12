@@ -62,9 +62,11 @@
         <Label Grid.Row="3"
                VerticalAlignment="Top"
                Height="34"
-               Content="Programok"
-               HorizontalContentAlignment="Center"
-               VerticalContentAlignment="Center" Margin="0,97,0,0"
+               Content="Programok:"
+               HorizontalContentAlignment="Left"
+               VerticalContentAlignment="Center"
+               Width="100"
+               Margin="0,97,0,0"
                Grid.RowSpan="2"
                FontSize="15">
 
@@ -75,8 +77,7 @@
                  x:Name="cbProgramok"
                  VerticalAlignment="Center"
                   Margin="0 20 0 0"
-                  FontSize="15"
-                  >
+                  FontSize="15">
         </ComboBox>
         <!--#endregion-->
 
@@ -92,17 +93,20 @@
                Content="">
 
         </Label>
-        <Label x:Name="lbGepEleres"
+        <ListBox
                Grid.Column="1"
                Grid.Row="1"
-               HorizontalContentAlignment="Right"
-               VerticalContentAlignment="Center"
-               Width="100"
-               Height="50"
-               FontSize="15"
-               Content="">
-
-        </Label>
+               FontSize="12" Margin="10,8,10,9"
+               ScrollViewer.HorizontalScrollBarVisibility="Visible"
+               x:Name="lbGepEleres"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
         <Label x:Name="lbGepMillimag"
               Grid.Column="1"
               Grid.Row="2"
