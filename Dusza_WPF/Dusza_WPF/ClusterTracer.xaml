@@ -1,0 +1,59 @@
+﻿<Page x:Class="Dusza_WPF.ClusterTracer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Dusza_WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="900" d:DesignWidth="1500"
+      Title="ClusterTracer">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="lbGepek" Grid.Column="0" Grid.Row="0"
+       FontSize="50"
+       VerticalContentAlignment="Center"
+       HorizontalContentAlignment="Center">Gépek</Label>
+        <Label x:Name="lbKlaszuter" Grid.Column="1" Grid.Row="0"
+       FontSize="50"
+       VerticalContentAlignment="Center"
+       HorizontalContentAlignment="Center">Klaszter</Label>
+
+        <!--<Button VerticalAlignment="Center"
+         HorizontalAlignment="Left"
+        Width="80"
+        Height="80"
+        FontSize="20">Betoltés</Button>-->
+
+        <ListView Grid.Column="0" Grid.Row="1" x:Name="lvGepek"
+          HorizontalContentAlignment="Center"
+          VerticalContentAlignment="Center"
+          AllowDrop="True"
+          DragOver="ListView_DragOver"
+          Drop="ListView_Drop"
+          Background="LightGray">
+        </ListView>
+
+        <Canvas Grid.Column="1" Grid.Row="1" x:Name="cKlaszter"
+        Drop="Canvas_Drop"
+        AllowDrop="True"
+        Background="LightGreen">
+            <Button Width="100" Height="100"
+            FontSize="50"
+            VerticalContentAlignment="Center"
+            HorizontalContentAlignment="Center" 
+            Canvas.Left="325" Canvas.Top="318"
+            x:Name="btnCenter"
+            Background="Red"></Button>
+        </Canvas>
+
+    </Grid>
+</Page>

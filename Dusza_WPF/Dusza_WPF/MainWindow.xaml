@@ -5,53 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dusza_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="1500">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
-        </Grid.RowDefinitions>
+            Title="MainWindow" Height="770" Width="1150" Background="Transparent" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <ControlTemplate x:Key="WindowStyle" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="true">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
 
-        <Label x:Name="lbGepek" Grid.Column="0" Grid.Row="0"
-               FontSize="50"
-               VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center">Gépek</Label>
-        <Label x:Name="lbKlaszuter" Grid.Column="1" Grid.Row="0"
-               FontSize="50"
-               VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center">Klaszter</Label>
 
-        <!--<Button VerticalAlignment="Center"
-                 HorizontalAlignment="Left"
-                Width="80"
-                Height="80"
-                FontSize="20">Betoltés</Button>-->
-        
-        <ListView Grid.Column="0" Grid.Row="1" x:Name="lvGepek"
-                  HorizontalContentAlignment="Center"
-                  VerticalContentAlignment="Center"
-                  AllowDrop="True"
-                  DragOver="ListView_DragOver"
-                  Drop="ListView_Drop"
-                  Background="LightGray">
-        </ListView>
 
-        <Canvas Grid.Column="1" Grid.Row="1" x:Name="cKlaszter"
-                Drop="Canvas_Drop"
-                AllowDrop="True"
-                Background="LightGreen">
-            <Button Width="100" Height="100"
-                    FontSize="50"
-                    VerticalContentAlignment="Center"
-                    HorizontalContentAlignment="Center" 
-                    Canvas.Left="325" Canvas.Top="318"
-                    x:Name="btnCenter"
-                    Background="Red"></Button>
-        </Canvas>
-        
-    </Grid>
+    <Border Margin="20">
+        <Border x:Name="window" Margin="20" Background="#FF262627" CornerRadius="1.5">
+            <Border.Effect>
+                <DropShadowEffect Direction="0" BlurRadius="12" Opacity="1" ShadowDepth="0"/>
+            </Border.Effect>
+            <StackPanel>
+                <Border x:Name="navbar" Width="1000" Height="60" Margin="20" Style="{DynamicResource borderback}" CornerRadius="5" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="12" Opacity=".7" ShadowDepth="0"/>
+                    </Border.Effect>
+                    <StackPanel Orientation="Horizontal" Width="1000" Height="50">
+                        <!--<Rectangle Width="50" Height="50" Margin="15,0,0,0">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="ClusterLogo.png"/>
+                            </Rectangle.Fill>
+                        </Rectangle>-->
+                        <Button x:Name="btnThemeToggle" Width="30" Height="30" Content="☀" FontSize="20" Style="{DynamicResource ThemeChanger}" Margin="50,0,0,0" Click="btnThemeToggle_Click"/>
+                        <Button x:Name="btnManager" Content="Cluster Manager" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="70,0,0,0" Click="btnManager_Click"/>
+                        <Button x:Name="btnAdmin" Content="Admin" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" />
+                        <Button x:Name="btnFogadas" Content="Fogadás" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" />
+                        <Button x:Name="btnFiok" Content="Fiók" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" />
+
+                        
+
+
+                        
+                        <Button x:Name="ShutdownButton" Content="X" Style="{DynamicResource ShutdownButton}" Width="33" Height="33" FontSize="20" Foreground="White" Background="Red" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" Margin="35,0,0,0" Click="ShutdownButton_Click"/>
+                    </StackPanel>
+                </Border>
+                <Frame x:Name="Container" NavigationUIVisibility="Hidden" Height="575" Width="1000" />
+            </StackPanel>
+        </Border>
+
+    </Border>
 </Window>
