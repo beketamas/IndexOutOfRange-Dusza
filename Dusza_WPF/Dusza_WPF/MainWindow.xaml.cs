@@ -36,13 +36,15 @@ namespace Dusza_WPF
                 Color = Colors.DarkOrange
             };
 
-            btnFogadas.Effect = dropShadowEffect;
-            btnAdmin.Effect = null;
-            btnManager.Effect = null;
-            btnFiok.Effect = null;
+            btnStartApplications.Effect = null;
+            btnAddComputer.Effect = null;
+            btnManager.Effect = dropShadowEffect;
+            btnDeleteComputer.Effect = null;
 
             Container.Content = new ClusterTracer(Eleres);
         }
+
+
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -85,6 +87,24 @@ namespace Dusza_WPF
 
                 IsDarkModeOn = true;
             }
+        }
+
+        private void btnAddComputer_Click(object sender, RoutedEventArgs e)
+        {
+            DropShadowEffect dropShadowEffect = new DropShadowEffect
+            {
+                Opacity = 1,
+                BlurRadius = 10,
+                ShadowDepth = 1,
+                Color = Colors.DarkOrange
+            };
+
+            btnStartApplications.Effect = null;
+            btnAddComputer.Effect = dropShadowEffect;
+            btnManager.Effect = null;
+            btnDeleteComputer.Effect = null;
+
+            Container.Content = new AddComputer(Eleres);
         }
     }
 }

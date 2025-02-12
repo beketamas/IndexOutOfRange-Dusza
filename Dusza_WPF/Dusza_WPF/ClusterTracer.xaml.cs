@@ -222,6 +222,7 @@ namespace Dusza_WPF
 
         public static void SzamitogepConfigok()
         {
+            gepek.Clear();
             szamitogepConfigok.Clear();
             foreach (var item in szamitogepMappakElerese)
             {
