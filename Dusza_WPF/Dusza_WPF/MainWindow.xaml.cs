@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Navigation;
+using System.Xml.Linq;
 
 namespace Dusza_WPF
 {
@@ -24,6 +25,7 @@ namespace Dusza_WPF
         {
             InitializeComponent(); // ✅ Ensure InitializeComponent() is called
             this.Eleres = eleres;
+
         }
 
         private void btnManager_Click(object sender, RoutedEventArgs e)
@@ -105,6 +107,24 @@ namespace Dusza_WPF
             btnDeleteComputer.Effect = null;
 
             Container.Content = new AddComputer(Eleres);
+        }
+
+        private void btnStartApplications_Click(object sender, RoutedEventArgs e)
+        {
+            DropShadowEffect dropShadowEffect = new DropShadowEffect
+            {
+                Opacity = 1,
+                BlurRadius = 10,
+                ShadowDepth = 1,
+                Color = Colors.DarkOrange
+            };
+
+            btnStartApplications.Effect = dropShadowEffect;
+            btnAddComputer.Effect = null;
+            btnManager.Effect = null;
+            btnDeleteComputer.Effect = null;
+
+            Container.Content = new StartApplication(Eleres);
         }
     }
 }

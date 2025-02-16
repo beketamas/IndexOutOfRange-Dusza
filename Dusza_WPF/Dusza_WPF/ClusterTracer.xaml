@@ -41,18 +41,18 @@
           Drop="ListView_Drop"
           Background="LightGray">
         </ListView>
-
-        <Canvas Grid.Column="1" Grid.Row="1" x:Name="cKlaszter"
-        Drop="Canvas_Drop"
-        AllowDrop="True"
-        Background="LightGreen">
-            <Button Width="100" Height="100"
-            FontSize="50"
-            VerticalContentAlignment="Center"
-            HorizontalContentAlignment="Center" 
-            Canvas.Left="325" Canvas.Top="318"
-            x:Name="btnCenter"
-            Background="Red"></Button>
+        <Canvas x:Name="cKlaszter"
+            Drop="Canvas_Drop"
+            AllowDrop="True"
+            Background="LightGreen"
+                Grid.Row="1"
+                Grid.Column="1">
+                <Button Width="100" Height="100"
+                FontSize="50"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center" 
+                x:Name="btnCenter"
+                Background="Red"></Button>
         </Canvas>
 
     </Grid>

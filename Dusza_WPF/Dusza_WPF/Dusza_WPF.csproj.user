@@ -19,6 +19,9 @@
     <Compile Update="Properties.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="StartApplication.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AddComputer.xaml">
@@ -40,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Properties.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StartApplication.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

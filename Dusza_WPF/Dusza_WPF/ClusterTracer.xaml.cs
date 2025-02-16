@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace Dusza_WPF
 {
@@ -52,6 +53,9 @@ namespace Dusza_WPF
                 MessageBox.Show(e.Message);
             }
             lvGepek.ItemsSource = gepek;
+            Canvas.SetLeft(btnCenter, 200);
+
+            Canvas.SetTop(btnCenter, 200);
         }
 
         #region
@@ -161,7 +165,7 @@ namespace Dusza_WPF
                 double btnCenterY = Canvas.GetTop(btnCenter) + btnCenter.ActualHeight / 2;
 
                 dynamicLine.X1 = gepCenterX;
-                dynamicLine.Y1 = gepCenterY + 20;
+                dynamicLine.Y1 = gepCenterY;
                 dynamicLine.X2 = btnCenterX;
                 dynamicLine.Y2 = btnCenterY;
             };
