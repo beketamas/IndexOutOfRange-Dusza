@@ -47,7 +47,7 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="2"
                 x:Name="btnMentes">
-            
+
         </Button>
 
         <TextBox Grid.Column="1"

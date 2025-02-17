@@ -47,7 +47,7 @@
             Background="LightGreen"
                 Grid.Row="1"
                 Grid.Column="1">
-                <Button Width="100" Height="100"
+                <Button Width="50" Height="50"
                 FontSize="50"
                 VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center" 

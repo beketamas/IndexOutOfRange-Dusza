@@ -18,39 +18,32 @@ using System.Windows.Shapes;
 namespace Dusza_WPF
 {
     /// <summary>
-    /// Interaction logic for ApplicationProperty.xaml
+    /// Interaction logic for AddApplication.xaml
     /// </summary>
-    public partial class ApplicationProperty : Window
+    public partial class AddApplication : Window
     {
+        private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
-        private string _gyoker;
         public static readonly List<Kluszter> _klaszterLista = [];
-
-        public ApplicationProperty(Kluszter program, string gyoker)
+        public AddApplication(string gyoker)
         {
             InitializeComponent();
             _gyoker = gyoker;
             KluszterCucc();
-            tbMemoria.Text = program.Memoria.ToString();
-            tbMillimag.Text = program.Millimag.ToString();
-            tbMennyiAktiv.Text = program.MennyiActive.ToString();
-
-            btnMentes.Click += (s, e) =>
+            
+            btnLetrehoz.Click += (s, e) =>
             {
-
-                var valasz = MessageBox.Show("Bizots menti?", "?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (valasz == MessageBoxResult.Yes)
+                if (tbMemoria.Text != "" && tbMennyiAktiv.Text != "" && tbMillimag.Text != "" && tbNév.Text != "")
                 {
-                    _klaszterLista.Where(x => x.ProgramName == program.ProgramName).First().MennyiActive = int.Parse(tbMennyiAktiv.Text.ToString().Trim());
-                    _klaszterLista.Where(x => x.ProgramName == program.ProgramName).First().Millimag = int.Parse(tbMillimag.Text.ToString().Trim());
-                    _klaszterLista.Where(x => x.ProgramName == program.ProgramName).First().Memoria = int.Parse(tbMemoria.Text.ToString().Trim());
+                    var tomb = $"{tbNév.Text};{tbMennyiAktiv.Text};{tbMillimag.Text};{tbMemoria.Text}";
+                    _klaszterLista.Add(new Kluszter(tomb.Split(";")));
                     File.WriteAllLines(_gyoker + "/.klaszter", _klaszterLista.Select(x => x.KiIratas()).ToArray());
-                    MessageBox.Show("Sikeres Mentés!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Sikeres Létrehozás!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
-                else return;
             };
         }
+
 
         public void KluszterCucc()
         {
@@ -65,7 +58,7 @@ namespace Dusza_WPF
                 }
             }
         }
-
         private void TextInput(object sender, TextCompositionEventArgs e) => e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
+
     }
 }

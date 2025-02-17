@@ -75,6 +75,13 @@ namespace Dusza_WPF
                 else MessageBox.Show("Válassz ki valamit!");
             };
 
+            //btnUjProgram.Click += (s, e) =>
+            //{
+            //    AddApplication window = new(_gyoker);
+            //    window.ShowDialog();
+            //    Betotles();
+            //};
+
         }
 
         public void Betotles()
@@ -84,9 +91,24 @@ namespace Dusza_WPF
             SzamitogepConfigok();
             ProgramokBeolvasása();
             KluszterCucc();
+            lbKlaszterProgramok.Items.Clear();
+            _klaszterLista.Select(x => x.ProgramName).ToList().ForEach(x => lbKlaszterProgramok.Items.Add(x));
+            Button gomb = new()
+            {
+                Width = 150,
+                Height = 30,
+                Content = "+",
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+            };
 
-            lbKlaszterProgramok.ItemsSource = _klaszterLista.Select(x => x.ProgramName);
-
+            gomb.Click += (s, e) =>
+            {
+                AddApplication window = new(_gyoker);
+                window.ShowDialog();
+                Betotles();
+            };
+            lbKlaszterProgramok.Items.Add(gomb);
 
             ObservableCollection<string> programok = [];
             foreach (var item in _szamitogepConfigok)

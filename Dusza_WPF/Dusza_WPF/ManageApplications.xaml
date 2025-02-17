@@ -40,7 +40,6 @@
                  FontSize="20" 
                  SelectionChanged="lbKlaszterProgramok_SelectionChanged"
                  HorizontalContentAlignment="Center">
-            
         </ListBox>
         <ListBox Grid.Row="1"
                  Grid.Column="1"

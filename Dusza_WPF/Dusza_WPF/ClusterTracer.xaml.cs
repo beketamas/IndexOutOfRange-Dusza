@@ -53,9 +53,9 @@ namespace Dusza_WPF
                 MessageBox.Show(e.Message);
             }
             lvGepek.ItemsSource = gepek;
-            Canvas.SetLeft(btnCenter, 200);
+            Canvas.SetLeft(btnCenter, 230);
 
-            Canvas.SetTop(btnCenter, 200);
+            Canvas.SetTop(btnCenter, 210);
         }
 
         #region

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Dusza_WPF"
         mc:Ignorable="d"
         Title="EleresMegadas" Height="450" Width="800">
-    <Grid>
+    <Grid Background="Gray">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
