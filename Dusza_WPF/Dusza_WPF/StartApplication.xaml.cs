@@ -31,6 +31,7 @@ namespace Dusza_WPF
         public static readonly List<string> _szamitogepMappakElerese = [];
 
 
+
         private static string _gyoker;
 
         public StartApplication(string gyoker)

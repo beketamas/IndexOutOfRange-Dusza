@@ -10,10 +10,16 @@
     <Compile Update="AddComputer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ApplicationProperty.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ClusterTracer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="EleresMegadas.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ManageApplications.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Properties.xaml.cs">
@@ -25,6 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="AddComputer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ApplicationProperty.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ClusterTracer.xaml">
@@ -40,6 +49,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ManageApplications.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Properties.xaml">

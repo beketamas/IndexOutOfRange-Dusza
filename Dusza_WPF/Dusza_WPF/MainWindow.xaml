@@ -60,7 +60,7 @@
                         <Button x:Name="btnThemeToggle" Width="30" Height="30" Content="☀" FontSize="20" Style="{DynamicResource ThemeChanger}" Margin="50,0,0,0" Click="btnThemeToggle_Click"/>
                         <Button x:Name="btnManager" Content="Cluster Manager" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="70,0,0,0" Click="btnManager_Click"/>
                         <Button x:Name="btnAddComputer" Content="Add Computer" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnAddComputer_Click" />
-                        <Button x:Name="btnDeleteComputer" Content="Delete Computer" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0"/>
+                        <Button x:Name="btnManageApplications" Content="Manage Applications" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnManageApplications_Click"/>
                         <Button x:Name="btnStartApplications" Content="Start Application" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnStartApplications_Click" />
 
                         
