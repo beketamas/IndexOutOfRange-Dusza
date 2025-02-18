@@ -112,9 +112,8 @@ namespace Dusza_WPF
 
             ObservableCollection<string> programok = [];
             foreach (var item in _szamitogepConfigok)
-            {
-                item.ProgramPeldanyAzonositok.ForEach(x => programok.Add(x));
-            }
+                item.ProgramPeldanyAzonositok.ForEach(x => programok.Add($"{item.Eleres.Split(@"\").Last()}: {x}"));
+
             lbProgrampeldanyok.ItemsSource = programok;
         }
         public void EgyProgramLeallitasa()
@@ -140,7 +139,7 @@ namespace Dusza_WPF
         }
         public void EgyAdottProgrampeldanyLeallitasa()
         {
-            string? name = lbProgrampeldanyok.SelectedItem.ToString();
+            string? name = lbProgrampeldanyok.SelectedItem.ToString().Split(" ").Last();
 
 
             var gep = _szamitogepConfigok.Where(x => x.ProgramPeldanyAzonositok.Contains(name)).First().Eleres;

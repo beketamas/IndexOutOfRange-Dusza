@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Dusza_WPF
     /// <summary>
     /// Interaction logic for EleresMegadas.xaml
     /// </summary>
-    public partial class EleresMegadas : Window
+    public partial class EleresMegadas : Page
     {
         public EleresMegadas()
         {
@@ -27,12 +28,24 @@ namespace Dusza_WPF
             {
                 if (s is Button tovabb && tbEleres.Text != null && tbEleres.Text != "")
                 {
+                    try
+                    {
+                        Directory.GetFiles(tbEleres.Text);
+                    }
+                    catch (Exception n)
+                    {
+
+                        MessageBox.Show(n.Message);
+                        return;
+                    }
+
+
                     MainWindow mainWindow = new(tbEleres.Text.ToString());
                     mainWindow.Show();
-                    Close();
+                    //Close();
                 }
                 else
-                    MessageBox.Show("WHYYYYY?");
+                    MessageBox.Show("Adjon meg a klaszter elérést!");
             };
         }
     }
