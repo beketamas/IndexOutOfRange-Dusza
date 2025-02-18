@@ -20,7 +20,7 @@ namespace Dusza_WPF
     /// </summary>
     public partial class EleresMegadas : Page
     {
-        public EleresMegadas()
+        public EleresMegadas(Window window)
         {
             InitializeComponent();
 
@@ -42,6 +42,8 @@ namespace Dusza_WPF
 
                     MainWindow mainWindow = new(tbEleres.Text.ToString());
                     mainWindow.Show();
+                    window.Close();
+                    
                     //Close();
                 }
                 else

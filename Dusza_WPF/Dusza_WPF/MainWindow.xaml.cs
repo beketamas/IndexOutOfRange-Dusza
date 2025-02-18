@@ -20,12 +20,11 @@ namespace Dusza_WPF
         private bool IsDarkModeOn = true;
 
         // ✅ Added parameterless constructor
-        public MainWindow() : this("") { }
+        public MainWindow() : this("") {}
 
         public MainWindow(string eleres)
         {
             InitializeComponent();
-
 
             Eleres = eleres;
             if (Eleres != "")
@@ -40,8 +39,9 @@ namespace Dusza_WPF
                 btnManageApplications.Opacity = 1;
                 btnManager.Opacity = 1;
                 btnStartApplications.Opacity = 1;
+                btnDeleteComputer.Opacity = 1;
             }
-            Container.Content = new EleresMegadas();
+            Container.Content = new EleresMegadas(this);
 
         }
 
@@ -182,7 +182,7 @@ namespace Dusza_WPF
             btnManageApplications.Effect = null;
             btnEleres.Effect = dropShadowEffect;
 
-            Container.Content = new EleresMegadas();
+            Container.Content = new EleresMegadas(this);
         }
     }
 }

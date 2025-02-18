@@ -75,13 +75,6 @@ namespace Dusza_WPF
                 else MessageBox.Show("Válassz ki valamit!");
             };
 
-            //btnUjProgram.Click += (s, e) =>
-            //{
-            //    AddApplication window = new(_gyoker);
-            //    window.ShowDialog();
-            //    Betotles();
-            //};
-
         }
 
         public void Betotles()

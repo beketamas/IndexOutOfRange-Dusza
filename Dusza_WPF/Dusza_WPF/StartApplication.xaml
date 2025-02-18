@@ -21,33 +21,92 @@
         <Label Content="Választható Programok:"
                Grid.ColumnSpan="2"
                HorizontalAlignment="Center"
-               FontSize="25"></Label>
+               FontSize="25"
+               Height="50"
+               VerticalAlignment="Center"></Label>
         <ComboBox Grid.Row="0"
                    Grid.ColumnSpan="2"
                   Width="200"
                   Height="50"
-                  Margin="0 50 0 0"
+                  Margin="0 10 0 0"
                   x:Name="cbValasztahtoProgramok"
                   VerticalContentAlignment="Center"
                   HorizontalContentAlignment="Center"
-                  FontSize="20">
+                  VerticalAlignment="Bottom"
+                  FontSize="20" SelectionChanged="cbValasztahtoProgramok_SelectionChanged">
         </ComboBox>
+        <Label Grid.Row="0"
+               Width="250"
+               Height="50"
+               VerticalAlignment="Bottom"
+               VerticalContentAlignment="Bottom"
+               HorizontalContentAlignment="Center"
+               HorizontalAlignment="Left"
+               Margin="10 0 0 0"
+               FontSize="20"
+               x:Name="lblProgramMemoria">
+            
+        </Label>
+
+        <Label Grid.Row="0"
+               Grid.Column="1"
+               Width="250"
+               Height="50"
+               VerticalAlignment="Bottom"
+               VerticalContentAlignment="Bottom"
+               HorizontalContentAlignment="Center"
+               FontSize="20"
+               x:Name="lblProgramMillimag"
+               HorizontalAlignment="Right"
+               Margin="0 0 10 0">
+
+        </Label>
 
         <Label Content="Választható Gépek:"
                Grid.ColumnSpan="2"
                HorizontalAlignment="Center"
                FontSize="25"
-               Grid.Row="1"></Label>
+               Grid.Row="1"
+               Height="50"
+               VerticalAlignment="Center"></Label>
         <ComboBox Grid.Row="1"
                    Grid.ColumnSpan="2"
                   Width="200"
                   Height="50"
-                  Margin="0 50 0 0"
+                  Margin="0 10 0 0"
                   x:Name="cbValasztahtoGepek"
                   VerticalContentAlignment="Center"
                   HorizontalContentAlignment="Center"
-                  FontSize="20">
+                  VerticalAlignment="Bottom"
+                  FontSize="20" SelectionChanged="cbValasztahtoGepek_SelectionChanged">
         </ComboBox>
+
+        <Label Grid.Row="1"
+               Width="250"
+               Height="50"
+               VerticalAlignment="Bottom"
+               VerticalContentAlignment="Bottom"
+               HorizontalContentAlignment="Center"
+               FontSize="20"
+               x:Name="lblGepMemoria"
+               HorizontalAlignment="Left"
+               Margin="10 0 0 0">
+
+        </Label>
+
+        <Label Grid.Row="1"
+               Grid.Column="1"
+               Width="250"
+               Height="50"
+               VerticalAlignment="Bottom"
+               VerticalContentAlignment="Bottom"
+               HorizontalContentAlignment="Center"
+               FontSize="20"
+               x:Name="lblGepMillimag"
+               HorizontalAlignment="Right"
+               Margin="0 0 10 0">
+
+        </Label>
 
         <Button Grid.Row="2"
                 Grid.ColumnSpan="2"

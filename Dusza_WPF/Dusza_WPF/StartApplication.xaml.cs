@@ -45,8 +45,6 @@ namespace Dusza_WPF
             cbValasztahtoProgramok.ItemsSource = _klaszterLista.Select(x => x.ProgramName);
             _szamitogepConfigok.ToList().ForEach(x => _gépNevek.Add($"{x.Eleres.Split(@"\").Last()}"));
             cbValasztahtoGepek.ItemsSource = _gépNevek;
-            cbValasztahtoGepek.SelectedIndex = 1;
-            cbValasztahtoProgramok.SelectedIndex = 1;
             btnStart.Click += (s, e) => ProgramPeldanyFuttatasa();
         }
 
@@ -57,21 +55,27 @@ namespace Dusza_WPF
             string? programNeve = cbValasztahtoProgramok.SelectedItem.ToString();
             string? valasztottGep = cbValasztahtoGepek.SelectedItem.ToString();
 
-            if (_szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).First().Memoria > _klaszterLista.Where(x => x.ProgramName == programNeve).First().Memoria &&
-                _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).First().Millimag > _klaszterLista.Where(x => x.ProgramName == programNeve).First().Millimag)
+            if (_szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Memoria > _klaszterLista.First(x => x.ProgramName == programNeve).Memoria &&
+                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Millimag > _klaszterLista.First(x => x.ProgramName == programNeve).Millimag)
             {
-                _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).First().Memoria -= _klaszterLista.Where(x => x.ProgramName == programNeve).First().Memoria;
-                _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).First().Millimag -= _klaszterLista.Where(x => x.ProgramName == programNeve).First().Millimag;
+                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Memoria -= _klaszterLista.First(x => x.ProgramName == programNeve).Memoria;
+                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Millimag -= _klaszterLista.First(x => x.ProgramName == programNeve).Millimag;
                 File.WriteAllLines(_gyoker + $"/{valasztottGep}/.szamitogep_config", _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).Select(x => x.KiIratas()).ToArray());
                 var startDate = DateTime.Now.ToString();
-                string[] tomb = [startDate, "AKTÍV", $"{_klaszterLista.Where(x => x.ProgramName == programNeve).First().Millimag}", $"{_klaszterLista.Where(x => x.ProgramName == programNeve).First().Memoria}"];
+                string[] tomb = [startDate, "AKTÍV", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Millimag}", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Memoria}"];
                 string randomAzonosito = "";
                 Random rnd = new();
                 for (int i = 0; i < 6; i++)
                     randomAzonosito += betuk[rnd.Next(0, betuk.Count)];
 
                 File.WriteAllLines(_gyoker + $"/{valasztottGep}/{programNeve}-{randomAzonosito}", tomb);
-                _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).First().ProgramPeldanyAzonositok.Add($"{programNeve}-{randomAzonosito}");
+                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).ProgramPeldanyAzonositok.Add($"{programNeve}-{randomAzonosito}");
+                cbValasztahtoProgramok.SelectedIndex = -1;
+                cbValasztahtoGepek.SelectedIndex = -1;
+                lblGepMemoria.Content = "";
+                lblGepMillimag.Content = "";
+                lblProgramMemoria.Content = "";
+                lblProgramMillimag.Content = "";
                 MessageBox.Show("Sikeres Futtatás!");
             }
             else
@@ -85,14 +89,7 @@ namespace Dusza_WPF
         {
             _szamitogepMappakElerese.Clear();
             foreach (string eleres in Directory.GetDirectories(_gyoker).ToList())
-            {
                 _szamitogepMappakElerese.Add(eleres);
-                //string[] splittelt = eleres.Split('/');
-                //if (splittelt.Last().Contains("szamitogep"))
-                //{
-                //};
-            }
-            //KluszterCucc();
 
         }
 
@@ -134,6 +131,35 @@ namespace Dusza_WPF
                 }
             }
             //kluszterLista.ForEach(x => Console.WriteLine($"{x.ProgramName};{x.MennyiActive};{x.Millimag};{x.Memoria}"));
+        }
+
+        private void cbValasztahtoProgramok_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbValasztahtoProgramok.SelectedIndex != -1)
+            {
+                string? programNeve = cbValasztahtoProgramok.SelectedItem.ToString();
+                var valasztottProgram = _klaszterLista.First(x => x.ProgramName == programNeve);
+                lblProgramMemoria.Content = $"Memória: {valasztottProgram.Memoria}MB";
+                lblProgramMillimag.Content = $"Millimag: {valasztottProgram.Millimag}";                
+            }
+
+        }
+
+        private void cbValasztahtoGepek_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (cbValasztahtoGepek.SelectedIndex != -1)
+            {
+                string? valasztottGep = cbValasztahtoGepek.SelectedItem.ToString();
+                var gep = _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep);
+                var sumMemoria = 0;
+                gep.ProgramPeldanyAzonositok.Select(x => x.Split("-")[0].ToString()).ToList().ForEach(x => sumMemoria += _klaszterLista.First(y => y.ProgramName == x).Memoria);
+
+                var sumMillimag = 0;
+                gep.ProgramPeldanyAzonositok.Select(x => x.Split("-")[0].ToString()).ToList().ForEach(x => sumMillimag += _klaszterLista.First(y => y.ProgramName == x).Millimag);
+                lblGepMemoria.Content = $"Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB";
+                lblGepMillimag.Content = $"Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}";                
+            }
         }
     }
 }
