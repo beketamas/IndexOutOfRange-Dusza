@@ -126,7 +126,8 @@ namespace Dusza_WPF
 
             var torlendoProgramKlaszteren = _klaszterLista.Where(x => x.ProgramName == valasztottProgram).First();
             _klaszterLista.Remove(torlendoProgramKlaszteren);
-            _klaszterLista.ForEach(x => File.WriteAllText(kluszterPath, x.KiIratas()));
+            File.Delete(kluszterPath);
+            _klaszterLista.ForEach(x => File.AppendAllText(kluszterPath, $"{x.KiIratas()}\n"));
             var torlendoProgramokGepeken = _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram));
 
             foreach (var item in torlendoProgramokGepeken)
