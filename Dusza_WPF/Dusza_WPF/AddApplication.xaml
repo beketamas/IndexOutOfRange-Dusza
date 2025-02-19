@@ -28,7 +28,7 @@
 
         </Label>
 
-        <Label Content="Millimag:"
+        <Label Content="Szabad Millimag:"
             Grid.Row="1"
             FontSize="20"
             HorizontalAlignment="Center"
