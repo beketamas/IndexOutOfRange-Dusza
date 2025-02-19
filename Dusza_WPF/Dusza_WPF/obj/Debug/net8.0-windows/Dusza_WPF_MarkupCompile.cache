@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Felhasznalo\Source\Repos\beketamas\IndexOutOfRange-Dusza\Dusza_WPF\Dusza_WPF\App.xaml
-111294342762
+131833673460
 
-15-757374500
+17-1708725594
 1981124507420
-AddApplication.xaml;AddComputer.xaml;ApplicationProperty.xaml;ClusterTracer.xaml;DarkTheme.xaml;EleresMegadas.xaml;LightTheme.xaml;MainWindow.xaml;ManageApplications.xaml;Properties.xaml;StartApplication.xaml;
+AddApplication.xaml;AddComputer.xaml;ApplicationProperty.xaml;ClusterTracer.xaml;DarkTheme.xaml;DeleteComputer.xaml;EleresMegadas.xaml;LightTheme.xaml;MainWindow.xaml;ManageApplications.xaml;Properties.xaml;RelocateApps.xaml;StartApplication.xaml;
 
 False
 

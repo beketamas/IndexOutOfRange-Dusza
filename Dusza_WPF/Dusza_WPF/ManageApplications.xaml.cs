@@ -170,6 +170,7 @@ namespace Dusza_WPF
             SzamitogepMappakElerese();
             SzamitogepConfigok();
             ProgramokBeolvasása();
+            Vizsgal();
         }
         public void EgyAdottProgrampeldanyLeallitasa()
         {

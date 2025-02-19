@@ -177,6 +177,7 @@ namespace Dusza_WPF
             btnManager.Effect = null;
             btnManageApplications.Effect = null;
             btnEleres.Effect = null;
+            btnDeleteComputer.Effect = null;
 
             Container.Content = new AddComputer(Eleres);
         }
@@ -196,6 +197,7 @@ namespace Dusza_WPF
             btnManager.Effect = null;
             btnEleres.Effect = null;
             btnManageApplications.Effect = null;
+            btnDeleteComputer.Effect = null;
 
             Container.Content = new StartApplication(Eleres);
         }
@@ -215,6 +217,7 @@ namespace Dusza_WPF
             btnManager.Effect = null;
             btnEleres.Effect = null;
             btnManageApplications.Effect = dropShadowEffect;
+            btnDeleteComputer.Effect = null;
 
             Container.Content = new ManageApplications(Eleres);
         }
@@ -234,6 +237,7 @@ namespace Dusza_WPF
             btnManager.Effect = null;
             btnManageApplications.Effect = null;
             btnEleres.Effect = dropShadowEffect;
+            btnDeleteComputer.Effect = null;
 
             Container.Content = new EleresMegadas();
         }
@@ -289,6 +293,26 @@ namespace Dusza_WPF
                 }
             }
             //kluszterLista.ForEach(x => Console.WriteLine($"{x.ProgramName};{x.MennyiActive};{x.Millimag};{x.Memoria}"));
+        }
+
+        private void btnDeleteComputer_Click(object sender, RoutedEventArgs e)
+        {
+            DropShadowEffect dropShadowEffect = new DropShadowEffect
+            {
+                Opacity = 1,
+                BlurRadius = 10,
+                ShadowDepth = 1,
+                Color = Colors.DarkOrange
+            };
+
+            btnStartApplications.Effect = null;
+            btnAddComputer.Effect = null;
+            btnManager.Effect = null;
+            btnManageApplications.Effect = null;
+            btnEleres.Effect = null;
+            btnDeleteComputer.Effect = dropShadowEffect;
+
+            Container.Content = new DeleteComputer(Eleres);
         }
     }
 }
