@@ -67,7 +67,31 @@ namespace Dusza_WPF
                     btnEleres.Opacity = 0.5;
                     Container.Content = new StartApplication(Eleres);
                 }
-
+                else if (i > futniaKene)
+                {
+                    ClasterManager.IsEnabled = false;
+                    AddComputer.IsEnabled = false;
+                    DeleteComputer.IsEnabled = false;
+                    Path.IsEnabled = false;
+                    StartApps.IsEnabled = false;
+                    ClasterManager.Opacity = 0.5;
+                    AddComputer.Opacity = 0.5;
+                    DeleteComputer.Opacity = 0.5;
+                    Path.Opacity = 0.5;
+                    StartApps.Opacity = 0.5;
+                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    {
+                        Opacity = 1,
+                        BlurRadius = 10,
+                        ShadowDepth = 1,
+                        Color = Colors.DarkOrange
+                    };
+                    StartApps.Effect = null;
+                    ManageApps.Effect = dropShadowEffect;
+                    ManageApplications.StartPulsingAnimation(MainWindow.ManageApps);
+                    Container.Content = new ManageApplications(Eleres);
+                    ManageApplications.error.Content = $"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!";
+                }
             }
         }
 

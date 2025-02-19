@@ -69,7 +69,7 @@ namespace Dusza_WPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Dusza_WPF;component/deletecomputer.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Dusza_WPF;V1.0.0.0;component/deletecomputer.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\DeleteComputer.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

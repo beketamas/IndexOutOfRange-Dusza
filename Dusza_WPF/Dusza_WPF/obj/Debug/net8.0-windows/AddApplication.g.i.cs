@@ -93,7 +93,7 @@ namespace Dusza_WPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Dusza_WPF;component/addapplication.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Dusza_WPF;V1.0.0.0;component/addapplication.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\AddApplication.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
