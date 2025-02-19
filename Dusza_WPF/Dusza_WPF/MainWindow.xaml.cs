@@ -9,6 +9,7 @@ using System.Windows.Navigation;
 using System.Xml.Linq;
 using System.IO;
 using System.Windows.Media.Animation;
+using System.Collections.ObjectModel;
 
 namespace Dusza_WPF
 {
@@ -20,6 +21,12 @@ namespace Dusza_WPF
         public string Eleres = "";
         private bool IsDarkModeOn = true;
         public static Button StartApps;
+        public static readonly ObservableCollection<SzamitogepConfig> _szamitogepConfigok = [];
+        public static readonly List<Kluszter> _klaszterLista = [];
+        public static readonly List<string> _szamitogepMappakElerese = [];
+        public const int EGYFOLYAMAT = 4;
+
+
 
         public MainWindow()
         {
@@ -28,6 +35,17 @@ namespace Dusza_WPF
             StartApps = btnStartApplications;
 
         }
+        public void Vizsgal()
+        {
+            foreach (var item in _klaszterLista)
+            {
+                int futniaKene = item.MennyiActive;
+                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                if (i < futniaKene)
+                    StartPulsingAnimation(btnStartApplications);
+            }
+        }
+
         private async void LoadPage()
         {
             EleresMegadas eleres = new EleresMegadas();
@@ -47,7 +65,10 @@ namespace Dusza_WPF
                 btnStartApplications.Opacity = 1;
                 btnDeleteComputer.Opacity = 1;
             }
-            
+            SzamitogepMappakElerese();
+            SzamitogepConfigok();
+            KluszterCucc();
+            Vizsgal();
         }
 
         private void btnManager_Click(object sender, RoutedEventArgs e)
@@ -69,7 +90,34 @@ namespace Dusza_WPF
             Container.Content = new ClusterTracer(Eleres);
         }
 
+        private void StartPulsingAnimation(Button button)
+        {
+            button.Foreground = new SolidColorBrush(Colors.Red);
+            ScaleTransform scale = new ScaleTransform(1, 1);
+            button.RenderTransform = scale;
+            button.RenderTransformOrigin = new Point(0.5, 0.5);
 
+            DoubleAnimation growAnimation = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 1.2,
+                Duration = TimeSpan.FromSeconds(0.5),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(growAnimation);
+
+            Storyboard.SetTarget(growAnimation, button);
+            Storyboard.SetTargetProperty(growAnimation, new PropertyPath("RenderTransform.ScaleX"));
+
+            DoubleAnimation growAnimationY = growAnimation.Clone();
+            Storyboard.SetTargetProperty(growAnimationY, new PropertyPath("RenderTransform.ScaleY"));
+            storyboard.Children.Add(growAnimationY);
+
+            storyboard.Begin();
+        }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -188,6 +236,59 @@ namespace Dusza_WPF
             btnEleres.Effect = dropShadowEffect;
 
             Container.Content = new EleresMegadas();
+        }
+
+        public void SzamitogepMappakElerese()
+        {
+            _szamitogepMappakElerese.Clear();
+            foreach (string eleres in Directory.GetDirectories(Eleres).ToList())
+            {
+                _szamitogepMappakElerese.Add(eleres);
+                //string[] splittelt = eleres.Split('/');
+                //if (splittelt.Last().Contains("szamitogep"))
+                //{
+                //};
+            }
+            //KluszterCucc();
+
+        }
+        public void SzamitogepConfigok()
+        {
+            _szamitogepConfigok.Clear();
+            foreach (var item in _szamitogepMappakElerese)
+            {
+                if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
+                {
+                    string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
+                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]), item, item.Split("\\").Last());
+
+                    foreach (var programok in Directory.GetFiles(item))
+                    {
+                        if (!programok.Contains(".szamitogep_config"))
+                        {
+                            gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
+                        }
+                    }
+
+                    _szamitogepConfigok.Add(gep);
+                }
+            }
+            //KluszterCucc();
+
+        }
+        public void KluszterCucc()
+        {
+            string kluszterPath = Directory.GetFiles(Eleres).Where(x => x.Contains(".klaszter")).First();
+            _klaszterLista.Clear();
+            for (int i = 0; i < File.ReadAllLines(kluszterPath).Select(x => x).ToList().Count; i++)
+            {
+                if (i == 0 || i % EGYFOLYAMAT == 0)
+                {
+                    int num = i + EGYFOLYAMAT;
+                    _klaszterLista.Add(new Kluszter(string.Join(";", File.ReadAllLines(kluszterPath).Select(x => x.ToString()).ToList()[i..num]).Split(";")));
+                }
+            }
+            //kluszterLista.ForEach(x => Console.WriteLine($"{x.ProgramName};{x.MennyiActive};{x.Millimag};{x.Memoria}"));
         }
     }
 }

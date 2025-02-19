@@ -38,7 +38,9 @@
                 Height="50"
                 Content="Tovább"
                 FontSize="25"
-                x:Name="btnTovabb">
+                x:Name="btnTovabb"
+                Style="{DynamicResource GeneralButton}"
+                >
         </Button>
     </Grid>
 </Page>

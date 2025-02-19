@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Dusza_WPF"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="575" d:DesignWidth="1000"
       Title="ManageApplications">
 
     <Grid>
@@ -24,7 +24,7 @@
                FontSize="25"
                VerticalContentAlignment="Center"
                HorizontalContentAlignment="Center">
-            
+
         </Label>
         <Label Grid.Row="0"
                Grid.Column="1"
@@ -52,37 +52,51 @@
         </ListBox>
         <Button Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Width="150"
+                Width="170"
                 Height="50"
                 FontSize="18"
                 Content="Program Leállíása"
                 HorizontalAlignment="Left"
-                Margin="20 0 0 0"
+                Margin="0, 0,0, 0"
                 x:Name="btnProgramLeallitas"
-                IsEnabled="False">
+                IsEnabled="False"
+                Style="{DynamicResource GeneralButton}">
+                
         </Button>
 
         <Button Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Width="180"
+                Width="185"
                 Height="50"
                 FontSize="18"
                 Content="Program Szerkeztése"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 x:Name="btnProgramSzerkeztese" 
-                IsEnabled="False">
-        </Button>
+                IsEnabled="False" Margin="270,0,0,0"
+                Style="{DynamicResource GeneralButton}"/>
+
+        <Button Grid.Row="2"
+        Width="205"
+        Height="50"
+        FontSize="18"
+        Content="Programok Szétosztása"
+        HorizontalAlignment="Left"
+        x:Name="btnProgramokSzetosztasa" 
+        IsEnabled="True" Grid.Column="1"
+        Margin="40,0,0,0" 
+        Click="btnProgramokSzetosztasa_Click"
+        Style="{DynamicResource GeneralButton}"/>
 
         <Button Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Width="150"
+                Width="160"
                 Height="50"
                 FontSize="18"
                 Content="Példány Leállítása"
                 Margin="0 0 20 0"
                 HorizontalAlignment="Right"
                 x:Name="btnPeldanyLeallitasa"
-                IsEnabled="False">
+                IsEnabled="False"
+                Style="{DynamicResource GeneralButton}">
         </Button>
     </Grid>
 </Page>

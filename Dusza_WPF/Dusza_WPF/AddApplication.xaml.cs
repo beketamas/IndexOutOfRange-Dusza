@@ -40,7 +40,6 @@ namespace Dusza_WPF
                     File.WriteAllLines(_gyoker + "/.klaszter", _klaszterLista.Select(x => x.KiIratas()).ToArray());
                     MessageBox.Show("Sikeres Létrehozás!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
-                    StartApplication.letrehozottProgramok.Add(tbNév.Text, int.Parse(tbMennyiAktiv.Text));
                 }
             };
         }

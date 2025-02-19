@@ -124,7 +124,8 @@
                 Height="60"
                 Content="Start"
                 FontSize="25"
-                x:Name="btnStart">
+                x:Name="btnStart"
+                Style="{DynamicResource GeneralButton}">
         </Button>
     </Grid>
 </Page>

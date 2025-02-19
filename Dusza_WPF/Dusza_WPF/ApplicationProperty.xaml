@@ -44,9 +44,11 @@
         <Button Width="100"
                 Height="50"
                 Content="Mentés"
+                FontSize="20"
                 Grid.Row="3"
                 Grid.ColumnSpan="2"
-                x:Name="btnMentes">
+                x:Name="btnMentes"
+                Style="{DynamicResource GeneralButton}">
 
         </Button>
 

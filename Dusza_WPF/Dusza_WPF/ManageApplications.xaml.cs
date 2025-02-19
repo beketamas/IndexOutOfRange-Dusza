@@ -30,7 +30,7 @@ namespace Dusza_WPF
         public static readonly ObservableCollection<SzamitogepConfig> _szamitogepConfigok = [];
         public static readonly List<string> _szamitogepMappakElerese = [];
         public static readonly Dictionary<ProgramFolyamat, string> _szamitogepekenFutoAlkalmazasok = [];
-
+        private static Storyboard _pulseStoryboard;
         private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
 
@@ -128,19 +128,28 @@ namespace Dusza_WPF
                 RepeatBehavior = RepeatBehavior.Forever
             };
 
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(growAnimation);
-
+            _pulseStoryboard = new Storyboard();
+            _pulseStoryboard.Children.Add(growAnimation);
             Storyboard.SetTarget(growAnimation, button);
             Storyboard.SetTargetProperty(growAnimation, new PropertyPath("RenderTransform.ScaleX"));
 
             DoubleAnimation growAnimationY = growAnimation.Clone();
             Storyboard.SetTargetProperty(growAnimationY, new PropertyPath("RenderTransform.ScaleY"));
-            storyboard.Children.Add(growAnimationY);
+            _pulseStoryboard.Children.Add(growAnimationY);
 
-            storyboard.Begin();
+            _pulseStoryboard.Begin();
         }
+        public static void ResetButtonAnimation(Button button)
+        {
+            if (_pulseStoryboard != null)
+            {
+                _pulseStoryboard.Stop(); // Stop the animation
+            }
 
+            // Reset button transform
+            button.RenderTransform = new ScaleTransform(1, 1);
+            button.Foreground = new SolidColorBrush(Colors.White);  
+        }
         public void EgyProgramLeallitasa()
         {
             string kluszterPath = Directory.GetFiles(_gyoker).Where(x => x.Contains(".klaszter")).First();
@@ -255,7 +264,11 @@ namespace Dusza_WPF
             btnPeldanyLeallitasa.IsEnabled = lbProgrampeldanyok.SelectedIndex != -1;
             lbKlaszterProgramok.SelectedIndex = -1;
         }
-        
+
+        private void btnProgramokSzetosztasa_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
 
     }

@@ -30,8 +30,6 @@ namespace Dusza_WPF
         public static readonly List<string> _gépNevek = [];
         public static readonly ObservableCollection<SzamitogepConfig> _szamitogepConfigok = [];
         public static readonly List<string> _szamitogepMappakElerese = [];
-        public static Dictionary<string, int> letrehozottProgramok = [];
-
 
         private static string _gyoker;
 
@@ -47,20 +45,27 @@ namespace Dusza_WPF
             _szamitogepConfigok.ToList().ForEach(x => _gépNevek.Add($"{x.Eleres.Split(@"\").Last()}"));
             cbValasztahtoGepek.ItemsSource = _gépNevek;
             btnStart.Click += (s, e) => ProgramPeldanyFuttatasa();
-
+            Vizsgal();
 
 
         }
 
         public void Vizsgal()
         {
-            foreach (var item in letrehozottProgramok)
+            lblWarning.Content = "";
+            int hibak = 0;
+            foreach (var item in _klaszterLista)
             {
-                int futniaKene = item.Value;
-                var i = _szamitogepConfigok.Count(x => x.ProgramPeldanyAzonositok.Contains(item.Key));
+                int futniaKene = item.MennyiActive;
+                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
                 if (i < futniaKene)
-                    lblWarning.Content += $"{item.Key}-ből {futniaKene}-nak kell futnia!";
+                {
+                    lblWarning.Content += $"{futniaKene} {item.ProgramName}-nak(/nek) futnia kell! (Jelenleg {i}db fut)\n";
+                    hibak++;
+                }
             }
+            if (hibak == 0)
+                ManageApplications.ResetButtonAnimation(MainWindow.StartApps);
         }
 
         public void ProgramPeldanyFuttatasa()
@@ -91,6 +96,7 @@ namespace Dusza_WPF
                 lblProgramMemoria.Content = "";
                 lblProgramMillimag.Content = "";
                 MessageBox.Show("Sikeres Futtatás!");
+                Vizsgal();
             }
             else
             {
