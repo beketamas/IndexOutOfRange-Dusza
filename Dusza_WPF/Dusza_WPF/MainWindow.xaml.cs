@@ -7,6 +7,8 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Navigation;
 using System.Xml.Linq;
+using System.IO;
+using System.Windows.Media.Animation;
 
 namespace Dusza_WPF
 {
@@ -17,15 +19,35 @@ namespace Dusza_WPF
     {
         public string Eleres = "";
         private bool IsDarkModeOn = true;
+        public static Button StartApps;
 
-        // ✅ Added parameterless constructor
-        public MainWindow() : this("") { }
-
-        public MainWindow(string eleres)
+        public MainWindow()
         {
-            InitializeComponent(); // ✅ Ensure InitializeComponent() is called
-            this.Eleres = eleres;
+            InitializeComponent();
+            LoadPage();
+            StartApps = btnStartApplications;
 
+        }
+        private async void LoadPage()
+        {
+            EleresMegadas eleres = new EleresMegadas();
+            Container.Content = eleres;
+            Eleres = await eleres.GetResultAsync();
+            if (Eleres != "")
+            {
+                btnStartApplications.IsEnabled = true;
+                btnAddComputer.IsEnabled = true;
+                btnManageApplications.IsEnabled = true;
+                btnManager.IsEnabled = true;
+                btnDeleteComputer.IsEnabled = true;
+                btnStartApplications.Opacity = 1;
+                btnAddComputer.Opacity = 1;
+                btnManageApplications.Opacity = 1;
+                btnManager.Opacity = 1;
+                btnStartApplications.Opacity = 1;
+                btnDeleteComputer.Opacity = 1;
+            }
+            
         }
 
         private void btnManager_Click(object sender, RoutedEventArgs e)
@@ -42,6 +64,7 @@ namespace Dusza_WPF
             btnAddComputer.Effect = null;
             btnManager.Effect = dropShadowEffect;
             btnManageApplications.Effect = null;
+            btnEleres.Effect = null;
 
             Container.Content = new ClusterTracer(Eleres);
         }
@@ -105,6 +128,7 @@ namespace Dusza_WPF
             btnAddComputer.Effect = dropShadowEffect;
             btnManager.Effect = null;
             btnManageApplications.Effect = null;
+            btnEleres.Effect = null;
 
             Container.Content = new AddComputer(Eleres);
         }
@@ -122,6 +146,7 @@ namespace Dusza_WPF
             btnStartApplications.Effect = dropShadowEffect;
             btnAddComputer.Effect = null;
             btnManager.Effect = null;
+            btnEleres.Effect = null;
             btnManageApplications.Effect = null;
 
             Container.Content = new StartApplication(Eleres);
@@ -140,9 +165,29 @@ namespace Dusza_WPF
             btnStartApplications.Effect = null;
             btnAddComputer.Effect = null;
             btnManager.Effect = null;
+            btnEleres.Effect = null;
             btnManageApplications.Effect = dropShadowEffect;
 
             Container.Content = new ManageApplications(Eleres);
+        }
+
+        private void btnEleres_Click(object sender, RoutedEventArgs e)
+        {
+            DropShadowEffect dropShadowEffect = new DropShadowEffect
+            {
+                Opacity = 1,
+                BlurRadius = 10,
+                ShadowDepth = 1,
+                Color = Colors.DarkOrange
+            };
+
+            btnStartApplications.Effect = null;
+            btnAddComputer.Effect = null;
+            btnManager.Effect = null;
+            btnManageApplications.Effect = null;
+            btnEleres.Effect = dropShadowEffect;
+
+            Container.Content = new EleresMegadas();
         }
     }
 }

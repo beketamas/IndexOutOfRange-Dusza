@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -75,13 +76,6 @@ namespace Dusza_WPF
                 else MessageBox.Show("Válassz ki valamit!");
             };
 
-            //btnUjProgram.Click += (s, e) =>
-            //{
-            //    AddApplication window = new(_gyoker);
-            //    window.ShowDialog();
-            //    Betotles();
-            //};
-
         }
 
         public void Betotles()
@@ -107,16 +101,46 @@ namespace Dusza_WPF
                 AddApplication window = new(_gyoker);
                 window.ShowDialog();
                 Betotles();
+                StartPulsingAnimation(MainWindow.StartApps);
             };
             lbKlaszterProgramok.Items.Add(gomb);
 
             ObservableCollection<string> programok = [];
             foreach (var item in _szamitogepConfigok)
-            {
-                item.ProgramPeldanyAzonositok.ForEach(x => programok.Add(x));
-            }
+                item.ProgramPeldanyAzonositok.ForEach(x => programok.Add($"{item.Eleres.Split(@"\").Last()}: {x}"));
+
             lbProgrampeldanyok.ItemsSource = programok;
         }
+
+        private void StartPulsingAnimation(Button button)
+        {
+            button.Foreground = new SolidColorBrush(Colors.Red);
+            ScaleTransform scale = new ScaleTransform(1, 1);
+            button.RenderTransform = scale;
+            button.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            DoubleAnimation growAnimation = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 1.2,
+                Duration = TimeSpan.FromSeconds(0.5),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(growAnimation);
+
+            Storyboard.SetTarget(growAnimation, button);
+            Storyboard.SetTargetProperty(growAnimation, new PropertyPath("RenderTransform.ScaleX"));
+
+            DoubleAnimation growAnimationY = growAnimation.Clone();
+            Storyboard.SetTargetProperty(growAnimationY, new PropertyPath("RenderTransform.ScaleY"));
+            storyboard.Children.Add(growAnimationY);
+
+            storyboard.Begin();
+        }
+
         public void EgyProgramLeallitasa()
         {
             string kluszterPath = Directory.GetFiles(_gyoker).Where(x => x.Contains(".klaszter")).First();
@@ -126,7 +150,8 @@ namespace Dusza_WPF
 
             var torlendoProgramKlaszteren = _klaszterLista.Where(x => x.ProgramName == valasztottProgram).First();
             _klaszterLista.Remove(torlendoProgramKlaszteren);
-            _klaszterLista.ForEach(x => File.WriteAllText(kluszterPath, x.KiIratas()));
+            File.Delete(kluszterPath);
+            _klaszterLista.ForEach(x => File.AppendAllText(kluszterPath, $"{x.KiIratas()}\n"));
             var torlendoProgramokGepeken = _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram));
 
             foreach (var item in torlendoProgramokGepeken)
@@ -139,7 +164,7 @@ namespace Dusza_WPF
         }
         public void EgyAdottProgrampeldanyLeallitasa()
         {
-            string? name = lbProgrampeldanyok.SelectedItem.ToString();
+            string? name = lbProgrampeldanyok.SelectedItem.ToString().Split(" ").Last();
 
 
             var gep = _szamitogepConfigok.Where(x => x.ProgramPeldanyAzonositok.Contains(name)).First().Eleres;
