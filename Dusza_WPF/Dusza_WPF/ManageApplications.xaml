@@ -102,7 +102,6 @@
         x:Name="btnProgramokSzetosztasa" 
         IsEnabled="True" Grid.Column="1"
         Margin="40,0,0,0" 
-        Click="btnProgramokSzetosztasa_Click"
         Style="{DynamicResource GeneralButton}"/>
 
         <Button Grid.Row="2"

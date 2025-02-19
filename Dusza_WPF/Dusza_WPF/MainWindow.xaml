@@ -58,12 +58,12 @@
                             </Rectangle.Fill>
                         </Rectangle>-->
                         <Button x:Name="btnThemeToggle" Width="30" Height="30" Content="☀" FontSize="20" Style="{DynamicResource ThemeChanger}" Margin="30,0,0,0" Click="btnThemeToggle_Click"/>
-                        <Button x:Name="btnEleres" Content="Path" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnEleres_Click"/>
-                        <Button x:Name="btnManager" IsEnabled="False" Opacity="0.5" Content="Cluster Manager" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnManager_Click"/>
-                        <Button x:Name="btnAddComputer" IsEnabled="False" Opacity="0.5" Content="Add Computer" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnAddComputer_Click" />
-                        <Button x:Name="btnManageApplications" IsEnabled="False" Opacity="0.5" Content="Manage Applications" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnManageApplications_Click"/>
-                        <Button x:Name="btnStartApplications" IsEnabled="False" Opacity="0.5" Content="Start Application" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnStartApplications_Click" />
-                        <Button x:Name="btnDeleteComputer" IsEnabled="False" Opacity="0.5" Content="Delete Computer" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnDeleteComputer_Click"/>
+                        <Button x:Name="btnEleres" Content="Elérés" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnEleres_Click"/>
+                        <Button x:Name="btnManager" IsEnabled="False" Opacity="0.5" Content="Klaszter Kezelő" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnManager_Click"/>
+                        <Button x:Name="btnAddComputer" IsEnabled="False" Opacity="0.5" Content="Gép hozzáadása" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnAddComputer_Click" />
+                        <Button x:Name="btnManageApplications" IsEnabled="False" Opacity="0.5" Content="Programok kezelése" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnManageApplications_Click"/>
+                        <Button x:Name="btnStartApplications" IsEnabled="False" Opacity="0.5" Content="Program Indítása" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnStartApplications_Click" />
+                        <Button x:Name="btnDeleteComputer" IsEnabled="False" Opacity="0.5" Content="Számítógép törlése" Style="{DynamicResource NavButton}" Height="22" FontWeight="Bold" FontSize="15" Margin="30,0,0,0" Click="btnDeleteComputer_Click"/>
 
                         
                         <Button x:Name="ShutdownButton" Content="X" Style="{DynamicResource ShutdownButton}" Width="33" Height="33" FontSize="20" Foreground="White" Background="Red" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" Margin="35,0,0,0" Click="ShutdownButton_Click"/>

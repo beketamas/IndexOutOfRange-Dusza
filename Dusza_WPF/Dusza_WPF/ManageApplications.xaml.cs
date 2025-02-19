@@ -32,6 +32,7 @@ namespace Dusza_WPF
         public static readonly ObservableCollection<SzamitogepConfig> _szamitogepConfigok = [];
         public static readonly List<string> _szamitogepMappakElerese = [];
         public static readonly Dictionary<ProgramFolyamat, string> _szamitogepekenFutoAlkalmazasok = [];
+        public static readonly List<ProgramFolyamat> _alkalmazasok = new();
         private static Storyboard _pulseStoryboard;
         private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
@@ -78,6 +79,33 @@ namespace Dusza_WPF
                     Betotles();
                 }
                 else MessageBox.Show("Válassz ki valamit!");
+            };
+            btnProgramokSzetosztasa.Click += (s, e) =>
+            {
+                List<string> programAzonositok = new();
+                foreach (var gep in _szamitogepConfigok)
+                {
+                    foreach (string azonosito in gep.ProgramPeldanyAzonositok)
+                    {
+                        programAzonositok.Add(azonosito);
+                        gep.ProgramPeldanyAzonositok.Remove(azonosito);
+                    }
+                }
+                foreach (string program in programAzonositok)
+                {
+                    ProgramFolyamat aktProgram = _alkalmazasok.Where(x => x.FajlNeve.ToLower() == program.Split('-')[0].ToLower()).First();
+                    if (aktProgram.MemoriaEroforras > aktProgram.ProcesszorEroforras)
+                    {
+                        //Átírni elérhető memória/millimagra
+                        _szamitogepConfigok?.MaxBy(x => x.Memoria)?.ProgramPeldanyAzonositok.Add(program);
+                    }
+                    else
+                    {
+                        //Átírni elérhető memória/millimagra
+                        _szamitogepConfigok?.MaxBy(x => x.Millimag)?.ProgramPeldanyAzonositok.Add(program);
+                    }
+                }
+
             };
 
         }
@@ -246,6 +274,7 @@ namespace Dusza_WPF
         public static void SzamitogepConfigok()
         {
             _szamitogepConfigok.Clear();
+            
             foreach (var item in _szamitogepMappakElerese)
             {
                 if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
@@ -282,6 +311,7 @@ namespace Dusza_WPF
         public static void ProgramokBeolvasása()
         {
             _szamitogepekenFutoAlkalmazasok.Clear();
+            _alkalmazasok.Clear();
             foreach (var item in _szamitogepMappakElerese)
             {
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
@@ -291,6 +321,7 @@ namespace Dusza_WPF
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         _szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);
+                        _alkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()));
                     }
                 }
             }
@@ -307,11 +338,6 @@ namespace Dusza_WPF
         {
             btnPeldanyLeallitasa.IsEnabled = lbProgrampeldanyok.SelectedIndex != -1;
             lbKlaszterProgramok.SelectedIndex = -1;
-        }
-
-        private void btnProgramokSzetosztasa_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void Vizsgal()
