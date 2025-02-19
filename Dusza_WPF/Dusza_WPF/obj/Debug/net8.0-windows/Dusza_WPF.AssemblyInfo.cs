@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dusza_WPF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f760c1834f3f0c4546051f138ef171cdca38792b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbb56cde2cdc4233d1bd6ab41059163f1acd19b8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dusza_WPF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dusza_WPF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

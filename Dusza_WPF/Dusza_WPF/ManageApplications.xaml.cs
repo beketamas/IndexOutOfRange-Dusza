@@ -182,6 +182,8 @@ namespace Dusza_WPF
             SzamitogepMappakElerese();
             SzamitogepConfigok();
             ProgramokBeolvasása();
+            Vizsgal();
+            
         }
         public static void SzamitogepMappakElerese()
         {
@@ -189,12 +191,7 @@ namespace Dusza_WPF
             foreach (string eleres in Directory.GetDirectories(_gyoker).ToList())
             {
                 _szamitogepMappakElerese.Add(eleres);
-                //string[] splittelt = eleres.Split('/');
-                //if (splittelt.Last().Contains("szamitogep"))
-                //{
-                //};
             }
-            //KluszterCucc();
 
         }
         public static void SzamitogepConfigok()
@@ -218,7 +215,6 @@ namespace Dusza_WPF
                     _szamitogepConfigok.Add(gep);
                 }
             }
-            //KluszterCucc();
 
         }
         public static void KluszterCucc()
@@ -233,7 +229,6 @@ namespace Dusza_WPF
                     _klaszterLista.Add(new Kluszter(string.Join(";", File.ReadAllLines(kluszterPath).Select(x => x.ToString()).ToList()[i..num]).Split(";")));
                 }
             }
-            //kluszterLista.ForEach(x => Console.WriteLine($"{x.ProgramName};{x.MennyiActive};{x.Millimag};{x.Memoria}"));
         }
         public static void ProgramokBeolvasása()
         {
@@ -270,6 +265,16 @@ namespace Dusza_WPF
 
         }
 
+        public void Vizsgal()
+        {
+            foreach (var item in _klaszterLista)
+            {
+                int futniaKene = item.MennyiActive;
+                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                if (i < futniaKene)
+                    StartPulsingAnimation(MainWindow.StartApps);
+            }
+        }
 
     }
 }
