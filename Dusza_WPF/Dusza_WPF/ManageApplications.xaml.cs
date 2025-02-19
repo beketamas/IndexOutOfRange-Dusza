@@ -223,8 +223,10 @@ namespace Dusza_WPF
             btnPeldanyLeallitasa.IsEnabled = lbProgrampeldanyok.SelectedIndex != -1;
             lbKlaszterProgramok.SelectedIndex = -1;
         }
-        
 
+        private void btnProgramokSzetosztasa_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }

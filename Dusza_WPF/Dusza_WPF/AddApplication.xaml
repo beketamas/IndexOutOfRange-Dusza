@@ -56,7 +56,9 @@
              Content="Létrehozás"
              Grid.Row="4"
              Grid.ColumnSpan="2"
-             x:Name="btnLetrehoz">
+             x:Name="btnLetrehoz"
+             FontSize="16"
+             Style="{DynamicResource GeneralButton}">
 
         </Button>
 

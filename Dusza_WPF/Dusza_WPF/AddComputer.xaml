@@ -83,6 +83,7 @@
                 Width="100"
                 Height="50"
                 Content="Gép Hozzáadása"
-                x:Name="btnPcAdd"></Button>
+                x:Name="btnPcAdd"
+                Style="{DynamicResource GeneralButton}"></Button>
     </Grid>
 </Page>

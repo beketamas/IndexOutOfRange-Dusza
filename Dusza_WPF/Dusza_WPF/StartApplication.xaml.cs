@@ -161,5 +161,6 @@ namespace Dusza_WPF
                 lblGepMillimag.Content = $"Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}";                
             }
         }
+
     }
 }
