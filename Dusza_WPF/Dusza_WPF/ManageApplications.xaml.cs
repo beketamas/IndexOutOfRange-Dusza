@@ -18,6 +18,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace Dusza_WPF
 {
@@ -180,6 +181,24 @@ namespace Dusza_WPF
             string? valasztottProgram = lbKlaszterProgramok.SelectedItem.ToString();
 
 
+            var segedLista = new List<string>();
+            foreach (var item in _szamitogepekenFutoAlkalmazasok)
+            {
+                if (item.Key.FajlNeve.Contains(valasztottProgram) && !segedLista.Contains(item.Value.Split(@"\").Last()))
+                {
+                    var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{item.Value.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[1]) 
+                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) && x.Value.Contains(item.Value.Split(@"\").Last()))
+                        .Sum(x => x.Key.MemoriaEroforras);
+
+                    var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{item.Value.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[0]) 
+                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) && x.Value.Contains(item.Value.Split(@"\").Last()))
+                        .Sum(x => x.Key.ProcesszorEroforras);
+
+                    File.WriteAllText(_gyoker + $"/{item.Value.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
+                    segedLista.Add(item.Value.Split(@"\").Last());
+                }
+            }
+
             var torlendoProgramKlaszteren = _klaszterLista.Where(x => x.ProgramName == valasztottProgram).First();
             _klaszterLista.Remove(torlendoProgramKlaszteren);
             File.Delete(kluszterPath);
@@ -198,9 +217,15 @@ namespace Dusza_WPF
         public void EgyAdottProgrampeldanyLeallitasa()
         {
             string? name = lbProgrampeldanyok.SelectedItem.ToString().Split(" ").Last();
-
-
             var gep = _szamitogepConfigok.Where(x => x.ProgramPeldanyAzonositok.Contains(name)).First().Eleres;
+            var gepNev = gep.Split(@"\").Last();
+
+
+
+            var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{gepNev}/.tarhely").Select(x => x).ToList()[1]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.MemoriaEroforras;
+            var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{gepNev}/.tarhely").Select(x => x).ToList()[0]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.ProcesszorEroforras;
+            File.WriteAllText(_gyoker + $"/{gepNev}/.tarhely", $"{millimag}\n{memoria}");
+
             File.Delete($"{gep}\\{name}");
             MessageBox.Show("Sikeres Törlés!");
             SzamitogepMappakElerese();
@@ -230,7 +255,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }
@@ -262,7 +287,7 @@ namespace Dusza_WPF
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)
                 {
-                    if (!fajl.Contains(".szamitogep_config"))
+                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely"))
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         _szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);

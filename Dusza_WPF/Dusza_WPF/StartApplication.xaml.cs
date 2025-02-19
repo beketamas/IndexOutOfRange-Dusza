@@ -116,9 +116,11 @@ namespace Dusza_WPF
             if (_szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Memoria > _klaszterLista.First(x => x.ProgramName == programNeve).Memoria &&
                 _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Millimag > _klaszterLista.First(x => x.ProgramName == programNeve).Millimag)
             {
-                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Memoria -= _klaszterLista.First(x => x.ProgramName == programNeve).Memoria;
-                _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Millimag -= _klaszterLista.First(x => x.ProgramName == programNeve).Millimag;
-                File.WriteAllLines(_gyoker + $"/{valasztottGep}/.szamitogep_config", _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).Select(x => x.KiIratas()).ToArray());
+
+                var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{valasztottGep}/.tarhely").Select(x => x).ToList()[1]) - _klaszterLista.First(x => x.ProgramName == programNeve).Memoria;
+                var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{valasztottGep}/.tarhely").Select(x => x).ToList()[0]) - _klaszterLista.First(x => x.ProgramName == programNeve).Millimag;
+                //File.WriteAllLines(_gyoker + $"/{valasztottGep}/.szamitogep_config", _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).Select(x => x.KiIratas()).ToArray());
+                File.WriteAllText(_gyoker + $"/{valasztottGep}/.tarhely", $"{millimag}\n{memoria}");
                 var startDate = DateTime.Now.ToString();
                 string[] tomb = [startDate, "AKTÍV", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Millimag}", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Memoria}"];
                 string randomAzonosito = "";
@@ -164,7 +166,7 @@ namespace Dusza_WPF
    
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }

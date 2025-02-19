@@ -292,7 +292,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }

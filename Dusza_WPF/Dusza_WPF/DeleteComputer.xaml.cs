@@ -64,7 +64,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }
@@ -106,7 +106,7 @@ namespace Dusza_WPF
                     lbComputers.Items.Add(panel);
                 }
                 else
-                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}");
+                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}");
 
             });
 
@@ -179,7 +179,7 @@ namespace Dusza_WPF
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)
                 {
-                    if (!fajl.Contains(".szamitogep_config"))
+                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely"))
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         _szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);
