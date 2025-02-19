@@ -29,12 +29,12 @@ namespace Dusza_WPF
             lbGepNEv.Content = nev;
             lbGepEleres.Items.Add(eleres);
             lbGepMillimag.Content = millimag;
-            lbGepMemoria.Content = memoria;
+            lbGepMemoria.Content = $"{memoria}MB";
 
             foreach (var item in programok.Where(x => x.Value.Contains(nev)).ToDictionary())
                 this.programok.Add(item.Key);
 
-            cbProgramok.ItemsSource = this.programok.Select(x => $"{x.FajlNeve}");
+            lbProgramok.ItemsSource = this.programok.Select(x => $"{x.FajlNeve}");
             //cbProgramok.SelectedIndex = 1;
 
 

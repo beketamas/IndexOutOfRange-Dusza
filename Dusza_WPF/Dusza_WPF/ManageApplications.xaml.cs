@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -33,12 +34,14 @@ namespace Dusza_WPF
         private static Storyboard _pulseStoryboard;
         private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
+        public static Label error;
 
         public ManageApplications(string gyoker)
         {
             InitializeComponent();
             _gyoker = gyoker;
             Betotles();
+            error = lblError;
 
             btnPeldanyLeallitasa.Click += (s, e) =>
             {
@@ -101,7 +104,27 @@ namespace Dusza_WPF
                 AddApplication window = new(_gyoker);
                 window.ShowDialog();
                 Betotles();
+                MainWindow.ClasterManager.IsEnabled = false;
+                MainWindow.AddComputer.IsEnabled = false;
+                MainWindow.ManageApps.IsEnabled = false;
+                MainWindow.DeleteComputer.IsEnabled = false;
+                MainWindow.Path.IsEnabled = false;
+                MainWindow.ClasterManager.Opacity = 0.5;
+                MainWindow.AddComputer.Opacity = 0.5;
+                MainWindow.ManageApps.Opacity = 0.5;
+                MainWindow.DeleteComputer.Opacity = 0.5;
+                MainWindow.Path.Opacity = 0.5;
+                MainWindow.ManageApps.Effect = null;
                 StartPulsingAnimation(MainWindow.StartApps);
+                MainWindow.tartoka.Content = new StartApplication(_gyoker);
+                DropShadowEffect dropShadowEffect = new DropShadowEffect
+                {
+                    Opacity = 1,
+                    BlurRadius = 10,
+                    ShadowDepth = 1,
+                    Color = Colors.DarkOrange
+                };
+                MainWindow.StartApps.Effect = dropShadowEffect;
             };
             lbKlaszterProgramok.Items.Add(gomb);
 
@@ -112,7 +135,7 @@ namespace Dusza_WPF
             lbProgrampeldanyok.ItemsSource = programok;
         }
 
-        private void StartPulsingAnimation(Button button)
+        public static void StartPulsingAnimation(Button button)
         {
             button.Foreground = new SolidColorBrush(Colors.Red);
             ScaleTransform scale = new ScaleTransform(1, 1);
@@ -273,7 +296,25 @@ namespace Dusza_WPF
                 int futniaKene = item.MennyiActive;
                 var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
                 if (i < futniaKene)
+                {
                     StartPulsingAnimation(MainWindow.StartApps);
+                }
+                else if(i == futniaKene)
+                {
+                    ResetButtonAnimation(MainWindow.StartApps);
+                    MainWindow.ClasterManager.IsEnabled = true;
+                    MainWindow.AddComputer.IsEnabled = true;
+                    MainWindow.DeleteComputer.IsEnabled = true;
+                    MainWindow.Path.IsEnabled = true;
+                    MainWindow.StartApps.IsEnabled = true;
+                    MainWindow.ClasterManager.Opacity = 1;
+                    MainWindow.AddComputer.Opacity = 1;
+                    MainWindow.DeleteComputer.Opacity = 1;
+                    MainWindow.Path.Opacity = 1;
+                    MainWindow.StartApps.Opacity = 1;
+                    ResetButtonAnimation(MainWindow.ManageApps);
+                    lblError.Content = "";
+                }
             }
         }
 

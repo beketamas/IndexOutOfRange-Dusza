@@ -21,10 +21,16 @@ namespace Dusza_WPF
         public string Eleres = "";
         private bool IsDarkModeOn = true;
         public static Button StartApps;
+        public static Button ClasterManager;
+        public static Button AddComputer;
+        public static Button ManageApps;
+        public static Button DeleteComputer;
+        public static Button Path;
         public static readonly ObservableCollection<SzamitogepConfig> _szamitogepConfigok = [];
         public static readonly List<Kluszter> _klaszterLista = [];
         public static readonly List<string> _szamitogepMappakElerese = [];
         public const int EGYFOLYAMAT = 4;
+        public static Frame tartoka;
 
 
 
@@ -33,7 +39,12 @@ namespace Dusza_WPF
             InitializeComponent();
             LoadPage();
             StartApps = btnStartApplications;
-
+            ClasterManager = btnManager;
+            AddComputer = btnAddComputer;
+            ManageApps = btnManageApplications;
+            DeleteComputer = btnDeleteComputer;
+            Path = btnEleres;
+            tartoka = Container;
         }
         public void Vizsgal()
         {
@@ -42,7 +53,21 @@ namespace Dusza_WPF
                 int futniaKene = item.MennyiActive;
                 var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
                 if (i < futniaKene)
+                {
                     StartPulsingAnimation(btnStartApplications);
+                    btnManager.IsEnabled = false;
+                    btnAddComputer.IsEnabled = false;
+                    btnManageApplications.IsEnabled = false;
+                    btnDeleteComputer.IsEnabled = false;
+                    btnEleres.IsEnabled = false;
+                    btnManager.Opacity = 0.5;
+                    btnAddComputer.Opacity = 0.5;
+                    btnManageApplications.Opacity = 0.5;
+                    btnDeleteComputer.Opacity = 0.5;
+                    btnEleres.Opacity = 0.5;
+                    Container.Content = new StartApplication(Eleres);
+                }
+
             }
         }
 
@@ -140,7 +165,6 @@ namespace Dusza_WPF
                     Source = new Uri("LightTheme.xaml", UriKind.Relative)
                 });
 
-                // ✅ Added null-checks to prevent crashes
                 window?.SetValue(BackgroundProperty, Brushes.White);
                 navbar?.SetValue(BackgroundProperty, Brushes.White);
 

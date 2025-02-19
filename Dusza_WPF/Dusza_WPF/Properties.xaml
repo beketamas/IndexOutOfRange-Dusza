@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Dusza_WPF"
         mc:Ignorable="d"
         Title="Properties" Height="500" Width="450">
-    <Grid>
+    <Grid Background="#FF262627">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -27,8 +27,7 @@
                Width="100"
                Height="50"
                FontSize="15"
-               Content="Név:"
-               Foreground="Black">
+               Content="Név:">
         </Label>
 
         <Label
@@ -39,8 +38,7 @@
                Width="100"
                Height="50"
                FontSize="15"
-               Content="Elérés:"
-            Foreground="Black">
+               Content="Elérés:">
         </Label>
         <Label
                Grid.Column="0"
@@ -50,8 +48,7 @@
                Width="100"
                Height="50"
                FontSize="15"
-               Content="Millimag:"
-            Foreground="Black">
+               Content="Millimag:">
         </Label>
         <Label
                Grid.Column="0"
@@ -61,8 +58,7 @@
                Width="100"
                Height="50"
                FontSize="15"
-               Content="Memória:"
-            Foreground="Black">
+               Content="Memória:">
         </Label>
         <Label Grid.Row="3"
                VerticalAlignment="Top"
@@ -74,18 +70,18 @@
                Margin="0,97,0,0"
                Grid.RowSpan="2"
                FontSize="15"
-               Foreground="Black">
+               Grid.ColumnSpan="2">
 
         </Label>
-        <ComboBox Grid.Row="4"
-                 Height="30"
-                 Width="140"
-                 x:Name="cbProgramok"
+        <ListBox Grid.Row="4"
+                 Height="50"
+                 Width="150"
+                 x:Name="lbProgramok"
                  VerticalAlignment="Center"
                  Margin="0 20 0 0"
                  FontSize="15"
-                 Foreground="Black">
-        </ComboBox>
+                  Grid.ColumnSpan="2">
+        </ListBox>
         <!--#endregion-->
 
 
@@ -97,8 +93,7 @@
                Width="100"
                Height="50"
                FontSize="15"
-               Content=""
-               Foreground="Black">
+               Content="">
 
         </Label>
         <ListBox
@@ -122,9 +117,7 @@
               VerticalContentAlignment="Center"
               Width="100"
               Height="50"
-              FontSize="15"
-              Content=""
-              Foreground="Black">
+              FontSize="15">
 
         </Label>
         <Label x:Name="lbGepMemoria"
@@ -135,8 +128,7 @@
               Width="100"
               Height="50"
               FontSize="15"
-              Content=""
-              Foreground="Black">
+              Content="">
 
         </Label>
 

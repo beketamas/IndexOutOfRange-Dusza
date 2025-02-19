@@ -23,7 +23,10 @@
                Content="Klaszter Programok"
                FontSize="25"
                VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center">
+               HorizontalContentAlignment="Center"
+               Width="250"
+               HorizontalAlignment="Left"
+               Margin="20 0 0 0">
 
         </Label>
         <Label Grid.Row="0"
@@ -31,7 +34,23 @@
                Content="Programpéldányok"
                FontSize="25"
                VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center"
+               HorizontalAlignment="Right"
+               Margin="0 0 20 0"
+               Width="250">
+        </Label>
+
+        <Label Grid.Row="0"
+               FontSize="20"
+               Grid.ColumnSpan="2"
+               HorizontalAlignment="Center"
+               Width="480"
+               Height="50"
+               Foreground="Red"
+               x:Name="lblError"
+               VerticalContentAlignment="Center"
                HorizontalContentAlignment="Center">
+            
         </Label>
 
         <ListBox Grid.Row="1"

@@ -89,7 +89,7 @@ namespace Dusza_WPF
 
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}",
+                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}",
                         Margin = new Thickness(0, 0, 10, 0) // Add some space between text and image
                     };
 
@@ -106,7 +106,7 @@ namespace Dusza_WPF
                     lbComputers.Items.Add(panel);
                 }
                 else
-                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}");
+                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}");
 
             });
 
