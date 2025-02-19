@@ -119,7 +119,7 @@ namespace Dusza_WPF
                 gep.PreviewMouseMove -= Button_PreviewMouseMove;
                 gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
                 CreateLine(gep);
-
+                gep.Background = new SolidColorBrush(Colors.Green);
             }
         }
 
@@ -187,6 +187,7 @@ namespace Dusza_WPF
 
                 gep.PreviewMouseMove -= CanvasButton_PreviewMouseMove;
                 gep.PreviewMouseMove += Button_PreviewMouseMove;
+                gep.Background = new SolidColorBrush(Colors.Red);
             }
         }
         #endregion
@@ -234,6 +235,7 @@ namespace Dusza_WPF
                 {
                     string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
                     var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]), item, item.Split("\\").Last());
+                    gep.Background = new SolidColorBrush(Colors.Red);
                     gep.PreviewMouseMove += Button_PreviewMouseMove;
                     gep.PreviewMouseDown += Button_PreviewMouseDown;
                     foreach (var programok in Directory.GetFiles(item))

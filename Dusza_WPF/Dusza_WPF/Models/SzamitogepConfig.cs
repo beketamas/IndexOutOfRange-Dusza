@@ -24,6 +24,7 @@ namespace DuszaProg_IndexOutOfRange
             Content = nev;
             Width = 100;
             Height = 30;
+            FontSize = 15;
         }
 
         public int Millimag { get => millimag; set => millimag = value; }

@@ -95,12 +95,12 @@ namespace Dusza_WPF
                 lblGepMillimag.Content = "";
                 lblProgramMemoria.Content = "";
                 lblProgramMillimag.Content = "";
-                MessageBox.Show("Sikeres Futtatás!");
+                MessageBox.Show("Sikeres Futtatás!", "Yay", MessageBoxButton.OK, MessageBoxImage.Information);
                 Vizsgal();
             }
             else
             {
-                MessageBox.Show("Nincs elég erőforrás!");
+                MessageBox.Show("Nincs elég erőforrás!", "Hűha", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
@@ -177,8 +177,8 @@ namespace Dusza_WPF
 
                 var sumMillimag = 0;
                 gep.ProgramPeldanyAzonositok.Select(x => x.Split("-")[0].ToString()).ToList().ForEach(x => sumMillimag += _klaszterLista.First(y => y.ProgramName == x).Millimag);
-                lblGepMemoria.Content = $"Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB";
-                lblGepMillimag.Content = $"Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}";                
+                lblGepMemoria.Content = $"Tárhely: {sumMemoria}MB/{gep.Memoria}MB";
+                lblGepMillimag.Content = $"Millimag: {sumMillimag}/{gep.Millimag}";                
             }
         }
 

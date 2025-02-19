@@ -89,7 +89,7 @@ namespace Dusza_WPF
 
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria + sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag + sumMillimag}",
+                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}",
                         Margin = new Thickness(0, 0, 10, 0) // Add some space between text and image
                     };
 
@@ -106,7 +106,7 @@ namespace Dusza_WPF
                     lbComputers.Items.Add(panel);
                 }
                 else
-                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria + sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag + sumMillimag}");
+                    lbComputers.Items.Add($"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}");
 
             });
 
@@ -149,7 +149,6 @@ namespace Dusza_WPF
 
                 if (futoProgramok.Any(x => x.IsActive == "AKTÍV"))
                 {
-                    //ProgramAthelyezese(futoProgramok, mappaNev);
                     RelocateApps relocateApps = new RelocateApps(futoProgramok, mappaNev, _gyoker);
                     relocateApps.ShowDialog();
                 }
@@ -157,7 +156,6 @@ namespace Dusza_WPF
                 else
                 {
                     File.Delete(_gyoker + $"\\{mappaNev}\\.szamitogep_config");
-                    //futoProgramok.Where(x => x.IsActive == "INAKTÍV").ToList().ForEach(x => File.Delete(gyoker + $"\\{mappaNev}\\{x.FajlNeve}"));
                     Directory.Delete(_gyoker + $"\\{mappaNev}");
                     MessageBox.Show("Sikeres törlés!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
                 }

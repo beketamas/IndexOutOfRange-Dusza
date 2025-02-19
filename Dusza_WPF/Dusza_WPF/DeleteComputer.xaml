@@ -24,22 +24,11 @@
                 Height="50"
                 Style="{DynamicResource GeneralButton}"
                 Grid.Row="1"
-                HorizontalAlignment="Center"
-                Margin="50 0 0 0"
+                HorizontalAlignment="Right"
+                Margin="0 0 150 0"
                 x:Name="btnDeleteComputer"
                 Content="Gép törlése"
                 FontSize="20">
-        </Button>
-
-        <Button Width="250"
-                Height="50"
-                Style="{DynamicResource GeneralButton}"
-                Grid.Row="1"
-                HorizontalAlignment="Right"
-                Margin="0 0 0 0"
-                Content="Programok áthelyezése"
-                FontSize="20"
-                x:Name="btnReplaceApps">
         </Button>
         <Image Height="25"
                HorizontalAlignment="Left"
