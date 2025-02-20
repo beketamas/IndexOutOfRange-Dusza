@@ -83,9 +83,10 @@ namespace Dusza_WPF
             btnProgramokSzetosztasa.Click += (s, e) =>
             {
                 List<string> programAzonositok = new();
+                
                 foreach (var gep in _szamitogepConfigok)
                 {
-                    foreach (string azonosito in gep.ProgramPeldanyAzonositok)
+                    foreach (string azonosito in gep.ProgramPeldanyAzonositok.ToList())
                     {
                         programAzonositok.Add(azonosito);
                         gep.ProgramPeldanyAzonositok.Remove(azonosito);
@@ -93,18 +94,60 @@ namespace Dusza_WPF
                 }
                 foreach (string program in programAzonositok)
                 {
-                    ProgramFolyamat aktProgram = _alkalmazasok.Where(x => x.FajlNeve.ToLower() == program.Split('-')[0].ToLower()).First();
+                    ProgramFolyamat aktProgram = _alkalmazasok.Where(x => x.FajlNeve.ToLower() == program.ToLower()).First();
                     if (aktProgram.MemoriaEroforras > aktProgram.ProcesszorEroforras)
                     {
                         //Átírni elérhető memória/millimagra
-                        _szamitogepConfigok?.MaxBy(x => x.Memoria)?.ProgramPeldanyAzonositok.Add(program);
+                        var gep = _szamitogepConfigok?.MaxBy(x => x.Memoria);
+                        gep.ProgramPeldanyAzonositok.Add(program);
+
+                        var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[1])
+                            - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
+                            .Sum(x => x.Key.MemoriaEroforras);
+
+                        var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[0])
+                            - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
+                            .Sum(x => x.Key.ProcesszorEroforras);
+
+                        File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
+
+                        var eredetiGep = _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == aktProgram.FajlNeve).Value;
+
+                        string originalPath = eredetiGep;
+                        string newPath = gep.Eleres;
+
+                        File.Copy($"{originalPath}\\{aktProgram.FajlNeve}", $"{newPath}\\{aktProgram.FajlNeve}", true);
+                        File.Delete($"{originalPath}\\{aktProgram.FajlNeve}");
+
                     }
                     else
                     {
                         //Átírni elérhető memória/millimagra
-                        _szamitogepConfigok?.MaxBy(x => x.Millimag)?.ProgramPeldanyAzonositok.Add(program);
+                        var gep = _szamitogepConfigok?.MaxBy(x => x.Millimag);
+                        gep.ProgramPeldanyAzonositok.Add(program);
+
+                        var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[1])
+                            - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
+                            .Sum(x => x.Key.MemoriaEroforras);
+
+                        var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[0])
+                            - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
+                            .Sum(x => x.Key.ProcesszorEroforras);
+
+                        File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
+
+                        var eredetiGep = _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == aktProgram.FajlNeve).Value;
+
+                        string originalPath = eredetiGep;
+                        string newPath = gep.Eleres;
+
+                        File.Copy($"{originalPath}\\{aktProgram.FajlNeve}", $"{newPath}\\{aktProgram.FajlNeve}", true);
+                        File.Delete($"{originalPath}\\{aktProgram.FajlNeve}");
                     }
+                    _alkalmazasok.Remove(aktProgram);
                 }
+
+                Betotles();
 
             };
 
