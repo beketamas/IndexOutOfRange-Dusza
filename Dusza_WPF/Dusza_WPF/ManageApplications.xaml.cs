@@ -37,6 +37,8 @@ namespace Dusza_WPF
         private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
         public static Label error;
+        List<ProgramFolyamat> marAtrakottProgramok = [];
+
 
         public ManageApplications(string gyoker)
         {
@@ -44,7 +46,7 @@ namespace Dusza_WPF
             _gyoker = gyoker;
             Betotles();
             error = lblError;
-
+            marAtrakottProgramok.Clear();
             btnPeldanyLeallitasa.Click += (s, e) =>
             {
                 var valasz = MessageBox.Show("Biztos hogy leállítja ezt a példányprogramot?", "?", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -89,16 +91,32 @@ namespace Dusza_WPF
         }
         public void ProgramokSzetosztasa()
         {
+            marAtrakottProgramok.Clear();
+
             List<string> programAzonositok = new();
+
+            var sumMag = 0;
+            var sumMemoria = 0;
+
 
             foreach (var gep in _szamitogepConfigok)
             {
+                var memoriaLines = File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely");
+                var maxMag = int.Parse(memoriaLines[0]);
+                var maxMemoria = int.Parse(memoriaLines[1]);
+                sumMag = 0;
+                sumMemoria = 0;
                 foreach (string azonosito in gep.ProgramPeldanyAzonositok.ToList())
                 {
                     programAzonositok.Add(azonosito);
                     gep.ProgramPeldanyAzonositok.Remove(azonosito);
+                    sumMag += int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[2]);
+                    sumMemoria += int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[3]);
 
                 }
+                gep.MaxMag = maxMag + sumMag;
+                gep.MaxMemoria = maxMemoria + sumMemoria;
+                File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{maxMag + sumMag}\n{sumMemoria + maxMemoria}");
 
             }
 
@@ -107,65 +125,62 @@ namespace Dusza_WPF
             foreach (string program in programAzonositok)
             {
                 ProgramFolyamat aktProgram = _alkalmazasok.Where(x => x.FajlNeve.ToLower() == program.ToLower()).First();
-
-                var gep = _szamitogepConfigok?
-                    .OrderByDescending(x => x.Memoria * 0.7 + x.Millimag * 0.3)
+                SzamitogepConfig? gep;
+                if (aktProgram.MemoriaEroforras < aktProgram.ProcesszorEroforras)
+                {
+                    gep = _szamitogepConfigok?.OrderByDescending(x => x.MaxMag)
                     .FirstOrDefault();
+                }
+                else
+                {
+                    gep = _szamitogepConfigok?.OrderByDescending(x => x.MaxMemoria)
+                    .FirstOrDefault();
+                }
 
+                
                 if (gep != null)
                 {
                     gep.ProgramPeldanyAzonositok.Add(program);
 
-                    // Retry logic for file access and update
-                    int maxRetries = 5;
-                    int delayBetweenRetries = 1000; // 1 second
+                    var eredetiGep = _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == aktProgram.FajlNeve).Value;
 
-                    for (int attempt = 0; attempt < maxRetries; attempt++)
+                    string originalPath = eredetiGep;
+                    string newPath = gep.Eleres;
+                    string origin = $"{originalPath}\\{aktProgram.FajlNeve}";
+                    string newP = $"{newPath}\\{aktProgram.FajlNeve}";
+                    if (origin != newP)
                     {
-                        var eredetiGep = _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == aktProgram.FajlNeve).Value;
-                            
-                        Rendezes(gep, aktProgram, eredetiGep);
-                        string originalPath = eredetiGep;
-                        string newPath = gep.Eleres;
-                        string origin = $"{originalPath}\\{aktProgram.FajlNeve}";
-                        string newP = $"{newPath}\\{aktProgram.FajlNeve}";
-                        if (origin != newP)
-                        {
-                            File.Copy(origin, newP, true);
-                            File.Delete($"{originalPath}\\{aktProgram.FajlNeve}");
-                        }
-                        
-
+                        File.Copy(origin, newP, true);
+                        File.Delete($"{originalPath}\\{aktProgram.FajlNeve}");
                     }
+                    Rendezes(gep, aktProgram, eredetiGep);
                 }
 
                 _alkalmazasok.Remove(aktProgram);
             }
-
             Betotles();
+            MessageBox.Show("Sikeres rendezés!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void Rendezes(SzamitogepConfig gep, ProgramFolyamat aktProgram, string eredetiGep)
         {
+
             var memoriaLines = File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely");
-            var memoria = int.Parse(memoriaLines[1]) - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
-                .Sum(x => x.Key.MemoriaEroforras);
 
-            var millimag = int.Parse(memoriaLines[0]) - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(gep.Eleres.Split(@"\").Last()))
-                .Sum(x => x.Key.ProcesszorEroforras);
+            if (!marAtrakottProgramok.Contains(_szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve)).Key))
+            {
+                var memoria = int.Parse(memoriaLines[1]) - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve))
+                    .Sum(x => x.Key.MemoriaEroforras);
 
-            // Retry writing the file
-            File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
+                var millimag = int.Parse(memoriaLines[0]) - _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) )
+                    .Sum(x => x.Key.ProcesszorEroforras);
 
-            // Retry moving the program
-            
-            var memoriaLinesEredeti = File.ReadAllLines($"{eredetiGep}/.tarhely");
-            var memoriaEredeti = int.Parse(memoriaLinesEredeti[1]) + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(eredetiGep.Split(@"\").Last()))
-                .Sum(x => x.Key.MemoriaEroforras);
+                marAtrakottProgramok.Add(_szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve)).Key);
+                gep.MaxMag = millimag;
+                gep.MaxMemoria = memoria;
+                File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");                
+            }
 
-            var millimagEredeti = int.Parse(memoriaLinesEredeti[0]) + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve) && x.Value.Contains(eredetiGep.Split(@"\").Last()))
-                .Sum(x => x.Key.ProcesszorEroforras);
-            File.WriteAllText(_gyoker + $"/{eredetiGep.Split(@"\").Last()}/.tarhely", $"{millimagEredeti}\n{memoriaEredeti}");
         }
 
         public void Betotles()
@@ -338,7 +353,10 @@ namespace Dusza_WPF
                 if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
                 {
                     string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
-                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]), item, item.Split("\\").Last());
+                    var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
+
+                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]), 
+                        item, item.Split("\\").Last(), int.Parse(memoriaLines[0]), int.Parse(memoriaLines[1]));
 
                     foreach (var programok in Directory.GetFiles(item))
                     {

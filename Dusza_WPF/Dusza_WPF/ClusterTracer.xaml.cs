@@ -234,7 +234,10 @@ namespace Dusza_WPF
                 if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
                 {
                     string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
-                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]), item, item.Split("\\").Last());
+                    var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
+
+                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]),
+                        item, item.Split("\\").Last(), int.Parse(memoriaLines[0]), int.Parse(memoriaLines[1]));
                     gep.Background = new SolidColorBrush(Colors.Red);
                     gep.PreviewMouseMove += Button_PreviewMouseMove;
                     gep.PreviewMouseDown += Button_PreviewMouseDown;
