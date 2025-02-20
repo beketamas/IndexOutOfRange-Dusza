@@ -120,6 +120,7 @@ namespace Dusza_WPF
             Vizsgal();
         }
 
+
         private void btnManager_Click(object sender, RoutedEventArgs e)
         {
             DropShadowEffect dropShadowEffect = new DropShadowEffect
@@ -312,6 +313,17 @@ namespace Dusza_WPF
                 if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
                 {
                     string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
+                    int millimag = int.Parse(configFajl[0]);
+                    int memoria = int.Parse(configFajl[1]);
+                    foreach (string file in Directory.GetFiles(item))
+                    {
+                        if (!file.Contains(".szamitogep_config") && !file.Contains(".tarhely"))
+                        {
+                            millimag -= int.Parse(File.ReadAllLines(file)[2]);
+                            memoria -= int.Parse(File.ReadAllLines(file)[3]);
+                        }
+                    }
+                    File.WriteAllLines($"{item}/.tarhely", $"{millimag}\n{memoria}".Split('\n'));
                     var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
 
                     var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]),

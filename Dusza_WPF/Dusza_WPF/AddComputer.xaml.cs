@@ -40,6 +40,7 @@ namespace Dusza_WPF
 
                 Directory.CreateDirectory(_gyoker + $"/{pcName}");
                 File.WriteAllLines(_gyoker + $"/{pcName}/.szamitogep_config", $"{millimag}\n{memoria}".Split("\n"));
+                File.WriteAllLines($"{gyoker}/{pcName}/.tarhely", $"{millimag}\n{memoria}".Split('\n'));
                 //szamitogepConfigok.Add(new SzamitogepConfig(millimag,memoria,$"{gyoker}\\{pcName}"));
 
                 MessageBox.Show("Sikeres hozzáadás!", "Yay",MessageBoxButton.OK, MessageBoxImage.Information);
