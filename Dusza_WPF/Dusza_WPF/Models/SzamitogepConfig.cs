@@ -18,6 +18,7 @@ namespace DuszaProg_IndexOutOfRange
         int maxMag;
         private List<string> programPeldanyAzonositok = [];
 
+        public SzamitogepConfig() { }
         public SzamitogepConfig(int millimag, int memoria, string eleres, string nev, int maxMemoria, int maxMag)
         {
             this.millimag = millimag;

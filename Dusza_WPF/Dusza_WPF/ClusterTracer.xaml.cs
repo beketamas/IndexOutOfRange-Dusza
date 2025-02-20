@@ -27,7 +27,9 @@ namespace Dusza_WPF
         public const int EGYFOLYAMAT = 4;
         public static string gyoker = "";
         public static readonly string[] files = [];
-        public static readonly List<string> szamitogepMappakElerese = [];
+        public static readonly List<string> nemHasznaltszamitogepMappakElerese = [];
+        public static readonly List<string> HasznaltszamitogepMappakElerese = [];
+        public static readonly List<SzamitogepConfig> hasznalatbanLevoGepek = [];
         public static readonly ObservableCollection<SzamitogepConfig> szamitogepConfigok = [];
         public static readonly Dictionary<ProgramFolyamat, string> szamitogepekenFutoAlkalmazasok = [];
         public static readonly List<Kluszter> klaszterLista = [];
@@ -36,7 +38,7 @@ namespace Dusza_WPF
 
 
 
-        public static readonly ObservableCollection<SzamitogepConfig> gepek = [];
+        public static readonly ObservableCollection<SzamitogepConfig> nemHasznaltgepek = [];
         readonly List<SzamitogepConfig> klaszter = [];
         readonly Dictionary<SzamitogepConfig, Line> lines = [];
         private static Point _initialMousePosition;
@@ -52,9 +54,14 @@ namespace Dusza_WPF
 
                 MessageBox.Show(e.Message);
             }
-            lvGepek.ItemsSource = gepek;
+            lvGepek.ItemsSource = nemHasznaltgepek;
+            hasznalatbanLevoGepek.ForEach(l =>
+            {
+                cKlaszter.Children.Add(l);
+                Canvas.SetLeft(l, 10);
+                Canvas.SetTop(l, 10);
+            });
             Canvas.SetLeft(btnCenter, 230);
-
             Canvas.SetTop(btnCenter, 210);
         }
 
@@ -78,7 +85,7 @@ namespace Dusza_WPF
             }
         }
 
-        private void CanvasButton_PreviewMouseMove(object sender, MouseEventArgs e)
+        private static void CanvasButton_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed && sender is SzamitogepConfig button)
             {
@@ -96,30 +103,38 @@ namespace Dusza_WPF
         {
             if (e.Data.GetData(typeof(SzamitogepConfig)) is SzamitogepConfig gep)
             {
-                if (lines.Any(x => x.Key == gep))
+
+                if (!hasznalatbanLevoGepek.Contains(gep))
                 {
-                    cKlaszter.Children.Remove(lines.Where(x => x.Key == gep).First().Value);
-                    lines.Remove(gep);
+                    if (lines.Any(x => x.Key == gep))
+                    {
+                        cKlaszter.Children.Remove(lines.Where(x => x.Key == gep).First().Value);
+                        lines.Remove(gep);
+                    }
+
+                    nemHasznaltgepek.Remove(gep);
+                    if (VisualTreeHelper.GetParent(gep) is ContentPresenter currentParent)
+                        currentParent.Content = null;
+
+                    Point dropPosition = e.GetPosition(sender as Canvas);
+                    Canvas.SetLeft(gep, dropPosition.X);
+                    Canvas.SetTop(gep, dropPosition.Y);
+
+                    if (sender is Canvas klaszter && !klaszter.Children.Contains(gep))
+                    {
+                        klaszter.Children.Add(gep);
+                        this.klaszter.Add(gep);
+                    }
+
+                    gep.PreviewMouseMove -= Button_PreviewMouseMove;
+                    gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
+                    CreateLine(gep);
+                    gep.Background = new SolidColorBrush(Colors.Green);
+                    hasznalatbanLevoGepek.Add(gep);
+                    var destination = gyoker + $"\\hasznalatbanLevoGepek\\{gep.Eleres.Split("\\").Last()}";
+                    Directory.Move(gep.Eleres, destination);
+                    SzamitogepMappakElerese();
                 }
-
-                gepek.Remove(gep);
-                if (VisualTreeHelper.GetParent(gep) is ContentPresenter currentParent)
-                    currentParent.Content = null;
-
-                Point dropPosition = e.GetPosition(sender as Canvas);
-                Canvas.SetLeft(gep, dropPosition.X);
-                Canvas.SetTop(gep, dropPosition.Y);
-
-                if (sender is Canvas klaszter && !klaszter.Children.Contains(gep))
-                {
-                    klaszter.Children.Add(gep);
-                    this.klaszter.Add(gep);
-                }
-
-                gep.PreviewMouseMove -= Button_PreviewMouseMove;
-                gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
-                CreateLine(gep);
-                gep.Background = new SolidColorBrush(Colors.Green);
             }
         }
 
@@ -158,6 +173,7 @@ namespace Dusza_WPF
 
             dynamicLine.Loaded += (sender, e) =>
             {
+
                 double gepCenterX = Canvas.GetLeft(gep) + gep.ActualWidth / 2;
                 double gepCenterY = Canvas.GetTop(gep) + gep.ActualHeight / 2;
 
@@ -174,7 +190,7 @@ namespace Dusza_WPF
 
         private void ListView_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetData(typeof(SzamitogepConfig)) is SzamitogepConfig gep && !gepek.Contains(gep))
+            if (e.Data.GetData(typeof(SzamitogepConfig)) is SzamitogepConfig gep && !nemHasznaltgepek.Contains(gep))
             {
                 if (lines.Any(x => x.Key == gep))
                 {
@@ -182,18 +198,25 @@ namespace Dusza_WPF
                     lines.Remove(gep);
                 }
 
-                gepek.Add(gep);
-                cKlaszter.Children.Remove(gep);
+                if (!nemHasznaltgepek.Contains(gep))
+                {
+                    hasznalatbanLevoGepek.Remove(gep);
+                    Directory.Move(gep.Eleres.Replace(@"/",@"\"), gyoker+ $@"\{gep.Eleres.Split(@"\").Last()}");
+                    gep.Eleres = gyoker + $@"\{gep.Eleres.Split(@"\").Last()}";
+                    nemHasznaltgepek.Add(gep);
+                    cKlaszter.Children.Remove(gep);
 
-                gep.PreviewMouseMove -= CanvasButton_PreviewMouseMove;
-                gep.PreviewMouseMove += Button_PreviewMouseMove;
-                gep.Background = new SolidColorBrush(Colors.Red);
+                    gep.PreviewMouseMove -= CanvasButton_PreviewMouseMove;
+                    gep.PreviewMouseMove += Button_PreviewMouseMove;
+                    gep.Background = new SolidColorBrush(Colors.Red);
+                    SzamitogepMappakElerese();
+                }
             }
         }
         #endregion
 
         #region
-        public static void Inditas(string eleres)
+        public void Inditas(string eleres)
         {
             gyoker = eleres;
             if (Directory.GetFiles(gyoker) != null && Directory.GetFiles(gyoker).Length > 0 && Directory.GetFiles(gyoker).Any(x => x.Contains(".klaszter")))
@@ -203,6 +226,7 @@ namespace Dusza_WPF
                 ProgramokBeolvasása();
                 KluszterCucc();
                 //MenuKiiratasa();
+
             }
             else
             {
@@ -212,63 +236,107 @@ namespace Dusza_WPF
 
         public static void SzamitogepMappakElerese()
         {
-            szamitogepMappakElerese.Clear();
-            foreach (string eleres in Directory.GetDirectories(gyoker).ToList())
+            nemHasznaltszamitogepMappakElerese.Clear();
+            hasznalatbanLevoGepek.Clear();
+            foreach (string eleres in Directory.GetDirectories(gyoker))
             {
-                szamitogepMappakElerese.Add(eleres);
+                if (!eleres.Contains("hasznalatbanLevoGepek"))
+                {
+                    nemHasznaltszamitogepMappakElerese.Add(eleres);
+                    
+                }
                 //string[] splittelt = eleres.Split('/');
                 //if (splittelt.Last().Contains("szamitogep"))
                 //{
                 //};
             }
+            if (Directory.GetDirectories(gyoker + "\\hasznalatbanLevoGepek").ToList().Count != 0)
+            {
+                foreach (var item in Directory.GetDirectories(gyoker+ "\\hasznalatbanLevoGepek").ToList())
+                {
+                    HasznaltszamitogepMappakElerese.Add(item);
+                }
+
+            }
+
+
             KluszterCucc();
 
         }
 
-        public static void SzamitogepConfigok()
+        public void SzamitogepConfigok()
         {
-            gepek.Clear();
+            hasznalatbanLevoGepek.Clear();
+            nemHasznaltgepek.Clear();
             szamitogepConfigok.Clear();
-            foreach (var item in szamitogepMappakElerese)
+            foreach (var item in nemHasznaltszamitogepMappakElerese)
             {
                 if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
                 {
-                    string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
-                    var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
-
-                    var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]),
-                        item, item.Split("\\").Last(), int.Parse(memoriaLines[0]), int.Parse(memoriaLines[1]));
-                    gep.Background = new SolidColorBrush(Colors.Red);
-                    gep.PreviewMouseMove += Button_PreviewMouseMove;
-                    gep.PreviewMouseDown += Button_PreviewMouseDown;
-                    foreach (var programok in Directory.GetFiles(item))
+                    if (!item.Contains("hasznalatbanLevoGepek"))
                     {
-                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
-                        {
-                            gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
-                        }
+                        var gep  = Beolvasas(item);
+                        gep.Background = new SolidColorBrush(Colors.Red);
+                        gep.PreviewMouseMove += Button_PreviewMouseMove;
+                        gep.PreviewMouseDown += Button_PreviewMouseDown;
+                        szamitogepConfigok.Add(gep);
+                        nemHasznaltgepek.Add(gep);
+                        
                     }
-                    gep.Click += (s, e) =>
-                    {
-                        if (s is SzamitogepConfig szamitoGep)
-                        {
-                            Properties properties = new(szamitoGep.Content.ToString(), szamitoGep.Eleres, szamitoGep.Millimag, szamitoGep.Memoria, szamitogepekenFutoAlkalmazasok);
-                            properties.Show();
 
-                        }
-                    };
-                    szamitogepConfigok.Add(gep);
-                    gepek.Add(gep);
                 }
             }
+
+            foreach (var item in HasznaltszamitogepMappakElerese)
+            {
+                if (Directory.GetFiles(item) != null && Directory.GetFiles(item).Length > 0 && Directory.GetFiles(item).Any(x => x.Contains(".szamitogep_config")))
+                {
+                    var gep = Beolvasas(item);
+                    gep.PreviewMouseMove -= Button_PreviewMouseMove;
+                    gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
+                    CreateLine(gep);
+                    gep.Background = new SolidColorBrush(Colors.Green);
+                    hasznalatbanLevoGepek.Add(gep);
+                }
+            }
+
             KluszterCucc();
+
+        }
+
+        public static SzamitogepConfig Beolvasas(string item)
+        {
+            string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
+            var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
+
+            var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]),
+                item, item.Split("\\").Last(), int.Parse(memoriaLines[0]), int.Parse(memoriaLines[1]));
+
+            foreach (var programok in Directory.GetFiles(item))
+            {
+                if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
+                {
+                    gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
+                }
+            }
+            gep.Click += (s, e) =>
+            {
+                if (s is SzamitogepConfig szamitoGep)
+                {
+                    Properties properties = new(szamitoGep.Content.ToString(), szamitoGep.Eleres, szamitoGep.Millimag, szamitoGep.Memoria, szamitogepekenFutoAlkalmazasok);
+                    properties.Show();
+
+                }
+            };
+
+            return gep;
 
         }
 
         public static void ProgramokBeolvasása()
         {
             szamitogepekenFutoAlkalmazasok.Clear();
-            foreach (var item in szamitogepMappakElerese)
+            foreach (var item in nemHasznaltszamitogepMappakElerese)
             {
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)

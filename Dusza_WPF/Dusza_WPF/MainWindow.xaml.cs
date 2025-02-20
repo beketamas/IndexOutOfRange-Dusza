@@ -114,6 +114,7 @@ namespace Dusza_WPF
                 btnStartApplications.Opacity = 1;
                 btnDeleteComputer.Opacity = 1;
             }
+            Directory.CreateDirectory(Eleres+"/hasznalatbanLevoGepek");
             SzamitogepMappakElerese();
             SzamitogepConfigok();
             KluszterCucc();
