@@ -18,16 +18,15 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="2"
+        <ListBox Grid.ColumnSpan="2"
                FontSize="20"
                Height="50"
                VerticalAlignment="Top"
                Foreground="Red"
-               Content=""
                HorizontalContentAlignment="Center"
                x:Name="lblWarning">
             
-        </Label>
+        </ListBox>
         <Label Content="Választható Programok:"
                Grid.ColumnSpan="2"
                HorizontalAlignment="Center"

@@ -151,8 +151,8 @@ namespace Dusza_WPF
                 mappaNev = lbComputers.SelectedItem.ToString().Split(" | ").First();
             try
             {
-                string[] files = Directory.GetFiles(_gyoker + $"\\{mappaNev}").ToList().Select(x => x.Split("\\").Last()).ToArray();
-                var futoProgramok = _szamitogepekenFutoAlkalmazasok.Where(x => x.Value == _gyoker + $"\\{mappaNev}").Select(x => x.Key).ToList();
+                string[] files = Directory.GetFiles(_gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}").ToList().Select(x => x.Split("\\").Last()).ToArray();
+                var futoProgramok = _szamitogepekenFutoAlkalmazasok.Where(x => x.Value == _gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}").Select(x => x.Key).ToList();
 
                 if (futoProgramok.Any(x => x.IsActive == "AKTÍV"))
                 {
@@ -162,8 +162,10 @@ namespace Dusza_WPF
 
                 else
                 {
-                    File.Delete(_gyoker + $"\\{mappaNev}\\.szamitogep_config");
-                    Directory.Delete(_gyoker + $"\\{mappaNev}");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}\\.szamitogep_config");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}\\.pozicio");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}\\.tarhely");
+                    Directory.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{mappaNev}");
                     MessageBox.Show("Sikeres törlés!", ":D", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }

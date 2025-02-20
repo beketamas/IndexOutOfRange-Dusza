@@ -40,7 +40,7 @@
                Width="250">
         </Label>
 
-        <Label Grid.Row="0"
+        <ListBox Grid.Row="0"
                FontSize="20"
                Grid.ColumnSpan="2"
                HorizontalAlignment="Center"
@@ -51,7 +51,7 @@
                VerticalContentAlignment="Center"
                HorizontalContentAlignment="Center">
             
-        </Label>
+        </ListBox>
 
         <ListBox Grid.Row="1"
                  x:Name="lbKlaszterProgramok"
@@ -71,12 +71,12 @@
         </ListBox>
         <Button Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Width="170"
+                Width="190"
                 Height="50"
                 FontSize="18"
                 Content="Program Leállíása"
                 HorizontalAlignment="Left"
-                Margin="0, 0,0, 0"
+                Margin="0, 20,0, 0"
                 x:Name="btnProgramLeallitas"
                 IsEnabled="False"
                 Style="{DynamicResource GeneralButton}">
@@ -84,33 +84,33 @@
         </Button>
 
         <Button Grid.Row="2"
-                Width="185"
+                Width="205"
                 Height="50"
                 FontSize="18"
                 Content="Program Szerkeztése"
                 HorizontalAlignment="Left"
                 x:Name="btnProgramSzerkeztese" 
-                IsEnabled="False" Margin="270,0,0,0"
+                IsEnabled="False" Margin="270,20,0,0"
                 Style="{DynamicResource GeneralButton}"/>
 
         <Button Grid.Row="2"
-        Width="205"
+        Width="220"
         Height="50"
         FontSize="18"
         Content="Programok Szétosztása"
         HorizontalAlignment="Left"
         x:Name="btnProgramokSzetosztasa" 
         IsEnabled="True" Grid.Column="1"
-        Margin="40,0,0,0" 
+        Margin="40,20,0,0" 
         Style="{DynamicResource GeneralButton}"/>
 
         <Button Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Width="160"
+                Width="180"
                 Height="50"
                 FontSize="18"
                 Content="Példány Leállítása"
-                Margin="0 0 20 0"
+                Margin="0 20 20 0"
                 HorizontalAlignment="Right"
                 x:Name="btnPeldanyLeallitasa"
                 IsEnabled="False"

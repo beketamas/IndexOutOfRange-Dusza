@@ -48,49 +48,53 @@ namespace Dusza_WPF
         }
         public void Vizsgal()
         {
-            foreach (var item in _klaszterLista)
+            if (_szamitogepConfigok.Count(x => x.Eleres.Contains("hasznalatbanLevoGepek"))>0)
             {
-                int futniaKene = item.MennyiActive;
-                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
-                if (i < futniaKene)
+                
+                foreach (var item in _klaszterLista)
                 {
-                    StartPulsingAnimation(btnStartApplications);
-                    btnManager.IsEnabled = false;
-                    btnAddComputer.IsEnabled = false;
-                    btnManageApplications.IsEnabled = false;
-                    btnDeleteComputer.IsEnabled = false;
-                    btnEleres.IsEnabled = false;
-                    btnManager.Opacity = 0.5;
-                    btnAddComputer.Opacity = 0.5;
-                    btnManageApplications.Opacity = 0.5;
-                    btnDeleteComputer.Opacity = 0.5;
-                    btnEleres.Opacity = 0.5;
-                    Container.Content = new StartApplication(Eleres);
-                }
-                else if (i > futniaKene)
-                {
-                    ClasterManager.IsEnabled = false;
-                    AddComputer.IsEnabled = false;
-                    DeleteComputer.IsEnabled = false;
-                    Path.IsEnabled = false;
-                    StartApps.IsEnabled = false;
-                    ClasterManager.Opacity = 0.5;
-                    AddComputer.Opacity = 0.5;
-                    DeleteComputer.Opacity = 0.5;
-                    Path.Opacity = 0.5;
-                    StartApps.Opacity = 0.5;
-                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    int futniaKene = item.MennyiActive;
+                    var i = _szamitogepConfigok.Where(x => x.Eleres.Contains("hasznalatbanLevoGepek")).Sum(y => y.ProgramPeldanyAzonositok.Count(z => z.Contains(item.ProgramName)));
+                    if (i < futniaKene)
                     {
-                        Opacity = 1,
-                        BlurRadius = 10,
-                        ShadowDepth = 1,
-                        Color = Colors.DarkOrange
-                    };
-                    StartApps.Effect = null;
-                    ManageApps.Effect = dropShadowEffect;
-                    ManageApplications.StartPulsingAnimation(MainWindow.ManageApps);
-                    Container.Content = new ManageApplications(Eleres);
-                    ManageApplications.error.Content = $"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!";
+                        StartPulsingAnimation(btnStartApplications);
+                        btnManager.IsEnabled = false;
+                        btnAddComputer.IsEnabled = false;
+                        btnManageApplications.IsEnabled = false;
+                        btnDeleteComputer.IsEnabled = false;
+                        btnEleres.IsEnabled = false;
+                        btnManager.Opacity = 0.5;
+                        btnAddComputer.Opacity = 0.5;
+                        btnManageApplications.Opacity = 0.5;
+                        btnDeleteComputer.Opacity = 0.5;
+                        btnEleres.Opacity = 0.5;
+                        Container.Content = new StartApplication(Eleres);
+                    }
+                    else if (i > futniaKene)
+                    {
+                        ClasterManager.IsEnabled = false;
+                        AddComputer.IsEnabled = false;
+                        DeleteComputer.IsEnabled = false;
+                        Path.IsEnabled = false;
+                        StartApps.IsEnabled = false;
+                        ClasterManager.Opacity = 0.5;
+                        AddComputer.Opacity = 0.5;
+                        DeleteComputer.Opacity = 0.5;
+                        Path.Opacity = 0.5;
+                        StartApps.Opacity = 0.5;
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        StartApps.Effect = null;
+                        ManageApps.Effect = dropShadowEffect;
+                        ManageApplications.StartPulsingAnimation(MainWindow.ManageApps);
+                        Container.Content = new ManageApplications(Eleres);
+                        ManageApplications.error.Items.Add($"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!");
+                    }
                 }
             }
         }
@@ -298,6 +302,15 @@ namespace Dusza_WPF
             if (Directory.GetDirectories(Eleres).ToList().Count != 0)
             {
                 foreach (var item in Directory.GetDirectories(Eleres).ToList())
+                {
+                    _szamitogepMappakElerese.Add(item);
+                }
+
+            }
+
+            if (Directory.GetDirectories(Eleres + "\\hasznalatbanLevoGepek").ToList().Count != 0)
+            {
+                foreach (var item in Directory.GetDirectories(Eleres + "\\hasznalatbanLevoGepek").ToList())
                 {
                     _szamitogepMappakElerese.Add(item);
                 }

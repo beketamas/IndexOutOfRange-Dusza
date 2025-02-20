@@ -80,10 +80,11 @@
         <!--#endregion-->
         
         <Button Grid.Row="4" Grid.ColumnSpan="2"
-                Width="100"
+                Width="180"
                 Height="50"
                 Content="Gép Hozzáadása"
                 x:Name="btnPcAdd"
+                FontSize="20"
                 Style="{DynamicResource GeneralButton}"></Button>
     </Grid>
 </Page>

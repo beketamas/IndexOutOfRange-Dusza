@@ -152,7 +152,6 @@ namespace Dusza_WPF
                     var destination = gyoker + $"\\hasznalatbanLevoGepek\\{gep.Eleres.Split("\\").Last()}";
                     Directory.Move(gep.Eleres, destination);
                     gep.Eleres = destination;
-                    SzamitogepMappakElerese();
                 }
 
                 if (sender is Canvas klaszter && !klaszter.Children.Contains(gep))
@@ -165,58 +164,62 @@ namespace Dusza_WPF
         }
         public void Vizsgal()
         {
-            foreach (var item in klaszterLista)
+            if (hasznalatbanLevoGepek.Count > 0)
             {
-                int futniaKene = item.MennyiActive;
-                var i = szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
-                if (i < futniaKene)
+                foreach (var item in klaszterLista)
                 {
-                    StartPulsingAnimation(MainWindow.StartApps);
-                    MainWindow.ClasterManager.IsEnabled = false;
-                    MainWindow.AddComputer.IsEnabled = false;
-                    MainWindow.ManageApps.IsEnabled = false;
-                    MainWindow.DeleteComputer.IsEnabled = false;
-                    MainWindow.Path.IsEnabled = false;
-                    MainWindow.ClasterManager.Opacity = 0.5;
-                    MainWindow.AddComputer.Opacity = 0.5;
-                    MainWindow.ManageApps.Opacity = 0.5;
-                    MainWindow.DeleteComputer.Opacity = 0.5;
-                    MainWindow.Path.Opacity = 0.5;
-                    MainWindow.tartoka.Content = new StartApplication(gyoker);
-                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    int futniaKene = item.MennyiActive;
+                    var i = hasznalatbanLevoGepek.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                    if (i < futniaKene)
                     {
-                        Opacity = 1,
-                        BlurRadius = 10,
-                        ShadowDepth = 1,
-                        Color = Colors.DarkOrange
-                    };
-                    MainWindow.StartApps.Effect = dropShadowEffect;
-                    MainWindow.ClasterManager.Effect = null;
-                }
-                else if (i > futniaKene)
-                {
-                    StartPulsingAnimation(MainWindow.ManageApps);
-                    MainWindow.ClasterManager.IsEnabled = false;
-                    MainWindow.AddComputer.IsEnabled = false;
-                    MainWindow.StartApps.IsEnabled = false;
-                    MainWindow.DeleteComputer.IsEnabled = false;
-                    MainWindow.Path.IsEnabled = false;
-                    MainWindow.ClasterManager.Opacity = 0.5;
-                    MainWindow.AddComputer.Opacity = 0.5;
-                    MainWindow.StartApps.Opacity = 0.5;
-                    MainWindow.DeleteComputer.Opacity = 0.5;
-                    MainWindow.Path.Opacity = 0.5;
-                    MainWindow.tartoka.Content = new ManageApplications(gyoker);
-                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        StartPulsingAnimation(MainWindow.StartApps);
+                        MainWindow.ClasterManager.IsEnabled = false;
+                        MainWindow.AddComputer.IsEnabled = false;
+                        MainWindow.ManageApps.IsEnabled = false;
+                        MainWindow.DeleteComputer.IsEnabled = false;
+                        MainWindow.Path.IsEnabled = false;
+                        MainWindow.ClasterManager.Opacity = 0.5;
+                        MainWindow.AddComputer.Opacity = 0.5;
+                        MainWindow.ManageApps.Opacity = 0.5;
+                        MainWindow.DeleteComputer.Opacity = 0.5;
+                        MainWindow.Path.Opacity = 0.5;
+                        MainWindow.tartoka.Content = new StartApplication(gyoker);
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        MainWindow.StartApps.Effect = dropShadowEffect;
+                        MainWindow.ClasterManager.Effect = null;
+                    }
+                    else if (i > futniaKene)
                     {
-                        Opacity = 1,
-                        BlurRadius = 10,
-                        ShadowDepth = 1,
-                        Color = Colors.DarkOrange
-                    };
-                    MainWindow.ManageApps.Effect = dropShadowEffect;
-                    MainWindow.ClasterManager.Effect = null;
+                        StartPulsingAnimation(MainWindow.ManageApps);
+                        MainWindow.ClasterManager.IsEnabled = false;
+                        MainWindow.AddComputer.IsEnabled = false;
+                        MainWindow.StartApps.IsEnabled = false;
+                        MainWindow.DeleteComputer.IsEnabled = false;
+                        MainWindow.Path.IsEnabled = false;
+                        MainWindow.ClasterManager.Opacity = 0.5;
+                        MainWindow.AddComputer.Opacity = 0.5;
+                        MainWindow.StartApps.Opacity = 0.5;
+                        MainWindow.DeleteComputer.Opacity = 0.5;
+                        MainWindow.Path.Opacity = 0.5;
+                        MainWindow.tartoka.Content = new ManageApplications(gyoker);
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        MainWindow.ManageApps.Effect = dropShadowEffect;
+                        MainWindow.ClasterManager.Effect = null;
+                    }
                 }
+                
             }
         }
 
@@ -320,7 +323,6 @@ namespace Dusza_WPF
                     gep.PreviewMouseMove -= CanvasButton_PreviewMouseMove;
                     gep.PreviewMouseMove += Button_PreviewMouseMove;
                     gep.Background = new SolidColorBrush(Colors.Red);
-                    SzamitogepMappakElerese();
                 }
             }
             Vizsgal();
@@ -359,10 +361,6 @@ namespace Dusza_WPF
                     nemHasznaltszamitogepMappakElerese.Add(eleres);
                     
                 }
-                //string[] splittelt = eleres.Split('/');
-                //if (splittelt.Last().Contains("szamitogep"))
-                //{
-                //};
             }
             if (Directory.GetDirectories(gyoker + "\\hasznalatbanLevoGepek").ToList().Count != 0)
             {

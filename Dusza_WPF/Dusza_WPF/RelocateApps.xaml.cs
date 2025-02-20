@@ -55,8 +55,8 @@ namespace Dusza_WPF
                         _szamitogepConfigok.First(x => x.Eleres.Split("\\").Last() == originalName).ProgramPeldanyAzonositok.Remove(athelyezendoProgram);
                         _szamitogepConfigok.First(x => x.Eleres.Split("\\").Last() == valasztottGep).ProgramPeldanyAzonositok.Add(athelyezendoProgram);
 
-                        string originalPath = $"{_gyoker}\\{originalName}";
-                        string newPath = $"{_gyoker}\\{destinationName}";
+                        string originalPath = $"{_gyoker}\\hasznalatbanLevoGepek\\{originalName}";
+                        string newPath = $"{_gyoker}\\hasznalatbanLevoGepek\\{destinationName}";
 
                         File.Copy($"{originalPath}\\{futoProgramok.First(x => x.IsActive == "AKTÍV" && x.FajlNeve == athelyezendoProgram).FajlNeve}", $"{newPath}\\{futoProgramok
                             .First(x => x.IsActive == "AKTÍV").FajlNeve}", true);
@@ -88,10 +88,12 @@ namespace Dusza_WPF
 
                 if (valasz == MessageBoxResult.Yes)
                 {
-                    string originalPath = $"{_gyoker}\\{originalName}";
+                    string originalPath = $"{_gyoker}\\hasznalatbanLevoGepek\\{originalName}";
 
-                    File.Delete(_gyoker + $"\\{originalName}\\.szamitogep_config");
-                    Directory.Delete(_gyoker + $"\\{originalName}");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{originalName}\\.szamitogep_config");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{originalName}\\.pozicio");
+                    File.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{originalName}\\.tarhely");
+                    Directory.Delete(_gyoker + $"\\hasznalatbanLevoGepek\\{originalName}");
                     MessageBox.Show("Sikeres törlése!");
                     Close();
                 }

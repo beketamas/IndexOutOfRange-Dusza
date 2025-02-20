@@ -36,7 +36,7 @@ namespace Dusza_WPF
         private static Storyboard _pulseStoryboard;
         private static string _gyoker = "";
         public const int EGYFOLYAMAT = 4;
-        public static Label error;
+        public static ListBox error;
         List<ProgramFolyamat> marAtrakottProgramok = [];
 
 
@@ -191,7 +191,7 @@ namespace Dusza_WPF
             ProgramokBeolvasása();
             KluszterCucc();
             lbKlaszterProgramok.Items.Clear();
-            _klaszterLista.Select(x => x.ProgramName).ToList().ForEach(x => lbKlaszterProgramok.Items.Add(x));
+            _klaszterLista.Select(x => x.ProgramName).ToList().ForEach(y => lbKlaszterProgramok.Items.Add($"{y} ({_szamitogepConfigok.Sum(z => z.ProgramPeldanyAzonositok.Count(g => g.Contains(y)))}db)"));
             Button gomb = new()
             {
                 Width = 150,
@@ -312,10 +312,10 @@ namespace Dusza_WPF
 
             File.Delete($"{gep}\\{name}");
             MessageBox.Show("Sikeres Törlés!");
+            Vizsgal();
             SzamitogepMappakElerese();
             SzamitogepConfigok();
             ProgramokBeolvasása();
-            Vizsgal();
             
         }
         public static void SzamitogepMappakElerese()
@@ -405,51 +405,84 @@ namespace Dusza_WPF
 
         public void Vizsgal()
         {
-            foreach (var item in _klaszterLista)
+            if (_szamitogepConfigok.Count > 0)
             {
-                int futniaKene = item.MennyiActive;
-                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
-                if (i < futniaKene)
+                error.Items.Clear();
+                foreach (var item in _klaszterLista)
                 {
-                    StartPulsingAnimation(MainWindow.StartApps);
-                    MainWindow.ClasterManager.IsEnabled = false;
-                    MainWindow.AddComputer.IsEnabled = false;
-                    MainWindow.ManageApps.IsEnabled = false;
-                    MainWindow.DeleteComputer.IsEnabled = false;
-                    MainWindow.Path.IsEnabled = false;
-                    MainWindow.ClasterManager.Opacity = 0.5;
-                    MainWindow.AddComputer.Opacity = 0.5;
-                    MainWindow.ManageApps.Opacity = 0.5;
-                    MainWindow.DeleteComputer.Opacity = 0.5;
-                    MainWindow.Path.Opacity = 0.5;
-                    MainWindow.tartoka.Content = new StartApplication(_gyoker);
-                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    int futniaKene = item.MennyiActive;
+                    var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                    if (i < futniaKene)
                     {
-                        Opacity = 1,
-                        BlurRadius = 10,
-                        ShadowDepth = 1,
-                        Color = Colors.DarkOrange
-                    };
-                    MainWindow.StartApps.Effect = dropShadowEffect;
-                    MainWindow.ManageApps.Effect = null;
+                        StartPulsingAnimation(MainWindow.StartApps);
+                        MainWindow.ClasterManager.IsEnabled = false;
+                        MainWindow.AddComputer.IsEnabled = false;
+                        MainWindow.ManageApps.IsEnabled = false;
+                        MainWindow.DeleteComputer.IsEnabled = false;
+                        MainWindow.Path.IsEnabled = false;
+                        MainWindow.ClasterManager.Opacity = 0.5;
+                        MainWindow.AddComputer.Opacity = 0.5;
+                        MainWindow.ManageApps.Opacity = 0.5;
+                        MainWindow.DeleteComputer.Opacity = 0.5;
+                        MainWindow.Path.Opacity = 0.5;
+                        MainWindow.tartoka.Content = new StartApplication(_gyoker);
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        MainWindow.StartApps.Effect = dropShadowEffect;
+                        MainWindow.ManageApps.Effect = null;
+                    }
+
+                    if (i > futniaKene)
+                    {
+                        StartPulsingAnimation(MainWindow.ManageApps);
+                        MainWindow.ClasterManager.IsEnabled = false;
+                        MainWindow.AddComputer.IsEnabled = false;
+                        MainWindow.StartApps.IsEnabled = false;
+                        MainWindow.DeleteComputer.IsEnabled = false;
+                        MainWindow.Path.IsEnabled = false;
+                        MainWindow.ClasterManager.Opacity = 0.5;
+                        MainWindow.AddComputer.Opacity = 0.5;
+                        MainWindow.StartApps.Opacity = 0.5;
+                        MainWindow.DeleteComputer.Opacity = 0.5;
+                        MainWindow.Path.Opacity = 0.5;
+
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        MainWindow.ManageApps.Effect = dropShadowEffect;
+                        MainWindow.ClasterManager.Effect = null;
+                        error.Items.Add($"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!");
+                    }
+
+                    else if(i == futniaKene)
+                    {
+                        ResetButtonAnimation(MainWindow.StartApps);
+                        MainWindow.ClasterManager.IsEnabled = true;
+                        MainWindow.AddComputer.IsEnabled = true;
+                        MainWindow.DeleteComputer.IsEnabled = true;
+                        MainWindow.Path.IsEnabled = true;
+                        MainWindow.StartApps.IsEnabled = true;
+                        MainWindow.ClasterManager.Opacity = 1;
+                        MainWindow.AddComputer.Opacity = 1;
+                        MainWindow.DeleteComputer.Opacity = 1;
+                        MainWindow.Path.Opacity = 1;
+                        MainWindow.StartApps.Opacity = 1;
+                        ResetButtonAnimation(MainWindow.ManageApps);
+                        lblError.Items.Clear();
+                    }
                 }
-                else if(i == futniaKene)
-                {
-                    ResetButtonAnimation(MainWindow.StartApps);
-                    MainWindow.ClasterManager.IsEnabled = true;
-                    MainWindow.AddComputer.IsEnabled = true;
-                    MainWindow.DeleteComputer.IsEnabled = true;
-                    MainWindow.Path.IsEnabled = true;
-                    MainWindow.StartApps.IsEnabled = true;
-                    MainWindow.ClasterManager.Opacity = 1;
-                    MainWindow.AddComputer.Opacity = 1;
-                    MainWindow.DeleteComputer.Opacity = 1;
-                    MainWindow.Path.Opacity = 1;
-                    MainWindow.StartApps.Opacity = 1;
-                    ResetButtonAnimation(MainWindow.ManageApps);
-                    lblError.Content = "";
-                }
+                
             }
+
         }
 
     }

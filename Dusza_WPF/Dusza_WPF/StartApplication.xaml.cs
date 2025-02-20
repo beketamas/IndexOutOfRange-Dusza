@@ -53,58 +53,62 @@ namespace Dusza_WPF
 
         public void Vizsgal()
         {
-            lblWarning.Content = "";
-            int hibak = 0;
-            foreach (var item in _klaszterLista)
+            if (_szamitogepConfigok.Count >0)
             {
-                int futniaKene = item.MennyiActive;
-                var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
-                if (i < futniaKene)
+                lblWarning.Items.Clear();
+                int hibak = 0;
+                foreach (var item in _klaszterLista)
                 {
-                    lblWarning.Content += $"{futniaKene} {item.ProgramName}-nak/nek futnia kell! (Jelenleg {i}db fut) | ";
-                    hibak++;
-                }
-
-                else if (i > futniaKene)
-                {
-                    MainWindow.ClasterManager.IsEnabled = false;
-                    MainWindow.AddComputer.IsEnabled = false;
-                    MainWindow.DeleteComputer.IsEnabled = false;
-                    MainWindow.Path.IsEnabled = false;
-                    MainWindow.StartApps.IsEnabled = false;
-                    MainWindow.ClasterManager.Opacity = 0.5;
-                    MainWindow.AddComputer.Opacity = 0.5;
-                    MainWindow.DeleteComputer.Opacity = 0.5;
-                    MainWindow.Path.Opacity = 0.5;
-                    MainWindow.StartApps.Opacity = 0.5;
-                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    int futniaKene = item.MennyiActive;
+                    var i = _szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                    if (i < futniaKene)
                     {
-                        Opacity = 1,
-                        BlurRadius = 10,
-                        ShadowDepth = 1,
-                        Color = Colors.DarkOrange
-                    };
-                    MainWindow.StartApps.Effect = null;
-                    MainWindow.ManageApps.Effect = dropShadowEffect;
-                    ManageApplications.StartPulsingAnimation(MainWindow.ManageApps);
-                    MainWindow.tartoka.Content = new ManageApplications(_gyoker);
-                    hibak++;
-                    ManageApplications.error.Content = $"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!";
+                        lblWarning.Items.Add($"{futniaKene} {item.ProgramName}-nak/nek futnia kell! (Jelenleg {i}db fut)");
+                        hibak++;
+                    }
+
+                    else if (i > futniaKene)
+                    {
+                        MainWindow.ClasterManager.IsEnabled = false;
+                        MainWindow.AddComputer.IsEnabled = false;
+                        MainWindow.DeleteComputer.IsEnabled = false;
+                        MainWindow.Path.IsEnabled = false;
+                        MainWindow.StartApps.IsEnabled = false;
+                        MainWindow.ClasterManager.Opacity = 0.5;
+                        MainWindow.AddComputer.Opacity = 0.5;
+                        MainWindow.DeleteComputer.Opacity = 0.5;
+                        MainWindow.Path.Opacity = 0.5;
+                        MainWindow.StartApps.Opacity = 0.5;
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect
+                        {
+                            Opacity = 1,
+                            BlurRadius = 10,
+                            ShadowDepth = 1,
+                            Color = Colors.DarkOrange
+                        };
+                        MainWindow.StartApps.Effect = null;
+                        MainWindow.ManageApps.Effect = dropShadowEffect;
+                        ManageApplications.StartPulsingAnimation(MainWindow.ManageApps);
+                        MainWindow.tartoka.Content = new ManageApplications(_gyoker);
+                        hibak++;
+                        ManageApplications.error.Items.Add($"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!");
+                    }
                 }
-            }
-            if (hibak == 0)
-            {
-                ManageApplications.ResetButtonAnimation(MainWindow.StartApps);
-                MainWindow.ClasterManager.IsEnabled = true;
-                MainWindow.AddComputer.IsEnabled = true;
-                MainWindow.ManageApps.IsEnabled = true;
-                MainWindow.DeleteComputer.IsEnabled = true;
-                MainWindow.Path.IsEnabled = true;
-                MainWindow.ClasterManager.Opacity = 1;
-                MainWindow.AddComputer.Opacity = 1;
-                MainWindow.ManageApps.Opacity = 1;
-                MainWindow.DeleteComputer.Opacity = 1;
-                MainWindow.Path.Opacity = 1;
+                if (hibak == 0)
+                {
+                    ManageApplications.ResetButtonAnimation(MainWindow.StartApps);
+                    MainWindow.ClasterManager.IsEnabled = true;
+                    MainWindow.AddComputer.IsEnabled = true;
+                    MainWindow.ManageApps.IsEnabled = true;
+                    MainWindow.DeleteComputer.IsEnabled = true;
+                    MainWindow.Path.IsEnabled = true;
+                    MainWindow.ClasterManager.Opacity = 1;
+                    MainWindow.AddComputer.Opacity = 1;
+                    MainWindow.ManageApps.Opacity = 1;
+                    MainWindow.DeleteComputer.Opacity = 1;
+                    MainWindow.Path.Opacity = 1;
+                }
+                
             }
         }
 
