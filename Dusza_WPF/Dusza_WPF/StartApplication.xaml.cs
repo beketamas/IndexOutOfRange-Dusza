@@ -64,6 +64,7 @@ namespace Dusza_WPF
                     lblWarning.Content += $"{futniaKene} {item.ProgramName}-nak/nek futnia kell! (Jelenleg {i}db fut) | ";
                     hibak++;
                 }
+
                 else if (i > futniaKene)
                 {
                     MainWindow.ClasterManager.IsEnabled = false;
@@ -117,10 +118,10 @@ namespace Dusza_WPF
                 _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).Millimag > _klaszterLista.First(x => x.ProgramName == programNeve).Millimag)
             {
 
-                var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{valasztottGep}/.tarhely").Select(x => x).ToList()[1]) - _klaszterLista.First(x => x.ProgramName == programNeve).Memoria;
-                var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{valasztottGep}/.tarhely").Select(x => x).ToList()[0]) - _klaszterLista.First(x => x.ProgramName == programNeve).Millimag;
+                var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{valasztottGep}/.tarhely").Select(x => x).ToList()[1]) - _klaszterLista.First(x => x.ProgramName == programNeve).Memoria;
+                var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{valasztottGep}/.tarhely").Select(x => x).ToList()[0]) - _klaszterLista.First(x => x.ProgramName == programNeve).Millimag;
                 //File.WriteAllLines(_gyoker + $"/{valasztottGep}/.szamitogep_config", _szamitogepConfigok.Where(x => x.Eleres.Split(@"\").Last() == valasztottGep).Select(x => x.KiIratas()).ToArray());
-                File.WriteAllText(_gyoker + $"/{valasztottGep}/.tarhely", $"{millimag}\n{memoria}");
+                File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{valasztottGep}/.tarhely", $"{millimag}\n{memoria}");
                 var startDate = DateTime.Now.ToString();
                 string[] tomb = [startDate, "AKTÍV", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Millimag}", $"{_klaszterLista.First(x => x.ProgramName == programNeve).Memoria}"];
                 string randomAzonosito = "";
@@ -128,7 +129,7 @@ namespace Dusza_WPF
                 for (int i = 0; i < 6; i++)
                     randomAzonosito += betuk[rnd.Next(0, betuk.Count)];
 
-                File.WriteAllLines(_gyoker + $"/{valasztottGep}/{programNeve}-{randomAzonosito}", tomb);
+                File.WriteAllLines(_gyoker + $"/hasznalatbanLevoGepek/{valasztottGep}/{programNeve}-{randomAzonosito}", tomb);
                 _szamitogepConfigok.First(x => x.Eleres.Split(@"\").Last() == valasztottGep).ProgramPeldanyAzonositok.Add($"{programNeve}-{randomAzonosito}");
                 cbValasztahtoProgramok.SelectedIndex = -1;
                 cbValasztahtoGepek.SelectedIndex = -1;
@@ -149,8 +150,14 @@ namespace Dusza_WPF
         public static void SzamitogepMappakElerese()
         {
             _szamitogepMappakElerese.Clear();
-            foreach (string eleres in Directory.GetDirectories(_gyoker).ToList())
-                _szamitogepMappakElerese.Add(eleres);
+            if (Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList().Count != 0)
+            {
+                foreach (var item in Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList())
+                {
+                    _szamitogepMappakElerese.Add(item);
+                }
+
+            }
 
         }
 
@@ -169,7 +176,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely") && !programok.Contains(".pozicio"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }

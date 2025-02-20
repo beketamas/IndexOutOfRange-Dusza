@@ -42,6 +42,8 @@
           Background="Gray">
         </ListView>
         <Canvas x:Name="cKlaszter"
+                Width="480"
+                Height="480"
             Drop="Canvas_Drop"
             AllowDrop="True"
             Background="#FFE8A91E"

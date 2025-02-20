@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -55,14 +58,32 @@ namespace Dusza_WPF
                 MessageBox.Show(e.Message);
             }
             lvGepek.ItemsSource = nemHasznaltgepek;
+
             hasznalatbanLevoGepek.ForEach(l =>
             {
                 cKlaszter.Children.Add(l);
-                Canvas.SetLeft(l, 10);
-                Canvas.SetTop(l, 10);
+                Random rnd = new Random();
+                double left = rnd.Next(0, Convert.ToInt32(cKlaszter.Width));
+                double top = rnd.Next(0, Convert.ToInt32(cKlaszter.Height));
+
+                if (l.PozicioX == 0 && l.PozicioY == 0)
+                {
+                    Canvas.SetLeft(l, left);
+                    Canvas.SetTop(l, top);
+                    l.PozicioX = left;
+                    l.PozicioY = top;
+                    File.WriteAllLines($"{l.Eleres}/.pozicio", $"{Convert.ToDouble(l.PozicioX)}\n{Convert.ToDouble(l.PozicioY)}".Split("\n"));
+                }
+                else
+                {
+                    Canvas.SetLeft(l, l.PozicioX);
+                    Canvas.SetTop(l, l.PozicioY);
+                }
+
+
             });
-            Canvas.SetLeft(btnCenter, 230);
-            Canvas.SetTop(btnCenter, 210);
+            Canvas.SetLeft(btnCenter, 220);
+            Canvas.SetTop(btnCenter, 220);
         }
 
         #region
@@ -103,39 +124,129 @@ namespace Dusza_WPF
         {
             if (e.Data.GetData(typeof(SzamitogepConfig)) is SzamitogepConfig gep)
             {
-
-                if (!hasznalatbanLevoGepek.Contains(gep))
+                if (lines.Any(x => x.Key == gep))
                 {
-                    if (lines.Any(x => x.Key == gep))
-                    {
-                        cKlaszter.Children.Remove(lines.Where(x => x.Key == gep).First().Value);
-                        lines.Remove(gep);
-                    }
+                    cKlaszter.Children.Remove(lines.Where(x => x.Key == gep).First().Value);
+                    lines.Remove(gep);
+                }
 
-                    nemHasznaltgepek.Remove(gep);
-                    if (VisualTreeHelper.GetParent(gep) is ContentPresenter currentParent)
-                        currentParent.Content = null;
+                nemHasznaltgepek.Remove(gep);
+                if (VisualTreeHelper.GetParent(gep) is ContentPresenter currentParent)
+                    currentParent.Content = null;
 
-                    Point dropPosition = e.GetPosition(sender as Canvas);
-                    Canvas.SetLeft(gep, dropPosition.X);
-                    Canvas.SetTop(gep, dropPosition.Y);
+                Point dropPosition = e.GetPosition(sender as Canvas);
+                Canvas.SetLeft(gep, dropPosition.X);
+                Canvas.SetTop(gep, dropPosition.Y);
+                gep.PozicioX = dropPosition.X;
+                gep.PozicioY = dropPosition.Y;
+                File.WriteAllText($"{gep.Eleres}/.pozicio", $"{Convert.ToDouble(gep.PozicioX)}\n{Convert.ToDouble(gep.PozicioY)}");
 
-                    if (sender is Canvas klaszter && !klaszter.Children.Contains(gep))
-                    {
-                        klaszter.Children.Add(gep);
-                        this.klaszter.Add(gep);
-                    }
+                gep.PreviewMouseMove -= Button_PreviewMouseMove;
+                gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
+                CreateLine(gep);
+                gep.Background = new SolidColorBrush(Colors.Green);
 
-                    gep.PreviewMouseMove -= Button_PreviewMouseMove;
-                    gep.PreviewMouseMove += CanvasButton_PreviewMouseMove;
-                    CreateLine(gep);
-                    gep.Background = new SolidColorBrush(Colors.Green);
+                if (!hasznalatbanLevoGepek.Contains(gep) && !cKlaszter.Children.Contains(gep))
+                {
                     hasznalatbanLevoGepek.Add(gep);
                     var destination = gyoker + $"\\hasznalatbanLevoGepek\\{gep.Eleres.Split("\\").Last()}";
                     Directory.Move(gep.Eleres, destination);
+                    gep.Eleres = destination;
                     SzamitogepMappakElerese();
                 }
+
+                if (sender is Canvas klaszter && !klaszter.Children.Contains(gep))
+                {
+                    klaszter.Children.Add(gep);
+                    this.klaszter.Add(gep);
+                }
             }
+            Vizsgal();
+        }
+        public void Vizsgal()
+        {
+            foreach (var item in klaszterLista)
+            {
+                int futniaKene = item.MennyiActive;
+                var i = szamitogepConfigok.Sum(x => x.ProgramPeldanyAzonositok.Count(y => y.Contains(item.ProgramName)));
+                if (i < futniaKene)
+                {
+                    StartPulsingAnimation(MainWindow.StartApps);
+                    MainWindow.ClasterManager.IsEnabled = false;
+                    MainWindow.AddComputer.IsEnabled = false;
+                    MainWindow.ManageApps.IsEnabled = false;
+                    MainWindow.DeleteComputer.IsEnabled = false;
+                    MainWindow.Path.IsEnabled = false;
+                    MainWindow.ClasterManager.Opacity = 0.5;
+                    MainWindow.AddComputer.Opacity = 0.5;
+                    MainWindow.ManageApps.Opacity = 0.5;
+                    MainWindow.DeleteComputer.Opacity = 0.5;
+                    MainWindow.Path.Opacity = 0.5;
+                    MainWindow.tartoka.Content = new StartApplication(gyoker);
+                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    {
+                        Opacity = 1,
+                        BlurRadius = 10,
+                        ShadowDepth = 1,
+                        Color = Colors.DarkOrange
+                    };
+                    MainWindow.StartApps.Effect = dropShadowEffect;
+                    MainWindow.ClasterManager.Effect = null;
+                }
+                else if (i > futniaKene)
+                {
+                    StartPulsingAnimation(MainWindow.ManageApps);
+                    MainWindow.ClasterManager.IsEnabled = false;
+                    MainWindow.AddComputer.IsEnabled = false;
+                    MainWindow.StartApps.IsEnabled = false;
+                    MainWindow.DeleteComputer.IsEnabled = false;
+                    MainWindow.Path.IsEnabled = false;
+                    MainWindow.ClasterManager.Opacity = 0.5;
+                    MainWindow.AddComputer.Opacity = 0.5;
+                    MainWindow.StartApps.Opacity = 0.5;
+                    MainWindow.DeleteComputer.Opacity = 0.5;
+                    MainWindow.Path.Opacity = 0.5;
+                    MainWindow.tartoka.Content = new ManageApplications(gyoker);
+                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    {
+                        Opacity = 1,
+                        BlurRadius = 10,
+                        ShadowDepth = 1,
+                        Color = Colors.DarkOrange
+                    };
+                    MainWindow.ManageApps.Effect = dropShadowEffect;
+                    MainWindow.ClasterManager.Effect = null;
+                }
+            }
+        }
+
+        public static void StartPulsingAnimation(Button button)
+        {
+            button.Foreground = new SolidColorBrush(Colors.Red);
+            ScaleTransform scale = new ScaleTransform(1, 1);
+            button.RenderTransform = scale;
+            button.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            DoubleAnimation growAnimation = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 1.2,
+                Duration = TimeSpan.FromSeconds(0.5),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(growAnimation);
+
+            Storyboard.SetTarget(growAnimation, button);
+            Storyboard.SetTargetProperty(growAnimation, new PropertyPath("RenderTransform.ScaleX"));
+
+            DoubleAnimation growAnimationY = growAnimation.Clone();
+            Storyboard.SetTargetProperty(growAnimationY, new PropertyPath("RenderTransform.ScaleY"));
+            storyboard.Children.Add(growAnimationY);
+
+            storyboard.Begin();
         }
 
         private void CreateLine(SzamitogepConfig gep)
@@ -212,6 +323,7 @@ namespace Dusza_WPF
                     SzamitogepMappakElerese();
                 }
             }
+            Vizsgal();
         }
         #endregion
 
@@ -236,7 +348,9 @@ namespace Dusza_WPF
 
         public static void SzamitogepMappakElerese()
         {
+
             nemHasznaltszamitogepMappakElerese.Clear();
+            HasznaltszamitogepMappakElerese.Clear();
             hasznalatbanLevoGepek.Clear();
             foreach (string eleres in Directory.GetDirectories(gyoker))
             {
@@ -309,16 +423,30 @@ namespace Dusza_WPF
             string[] configFajl = File.ReadAllLines(item + "/.szamitogep_config");
             var memoriaLines = File.ReadAllLines($"{item}/.tarhely");
 
+
+
             var gep = new SzamitogepConfig(Convert.ToInt32(configFajl[0]), Convert.ToInt32(configFajl[1]),
                 item, item.Split("\\").Last(), int.Parse(memoriaLines[0]), int.Parse(memoriaLines[1]));
-
+            try
+            {
+                var poziciok = File.ReadAllLines($"{item}/.pozicio");
+                gep.PozicioX = Convert.ToDouble(poziciok[0]);
+                gep.PozicioY = Convert.ToDouble(poziciok[1]);
+            }
+            catch (Exception)
+            {
+                gep.PozicioX = 0;
+                gep.PozicioY = 0;
+            }
             foreach (var programok in Directory.GetFiles(item))
             {
-                if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
+                if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely") && !programok.Contains(".pozicio"))
                 {
                     gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                 }
             }
+
+
             gep.Click += (s, e) =>
             {
                 if (s is SzamitogepConfig szamitoGep)
@@ -341,7 +469,7 @@ namespace Dusza_WPF
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)
                 {
-                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely"))
+                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely") && !fajl.Contains(".pozicio"))
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);

@@ -17,6 +17,8 @@ namespace DuszaProg_IndexOutOfRange
         int maxMemoria;
         int maxMag;
         private List<string> programPeldanyAzonositok = [];
+        double pozicioX = 0;
+        double pozicioY = 0;
 
         public SzamitogepConfig() { }
         public SzamitogepConfig(int millimag, int memoria, string eleres, string nev, int maxMemoria, int maxMag)
@@ -38,6 +40,8 @@ namespace DuszaProg_IndexOutOfRange
         public List<string> ProgramPeldanyAzonositok { get => programPeldanyAzonositok; set => programPeldanyAzonositok = value; }
         public int MaxMemoria { get => maxMemoria; set => maxMemoria = value; }
         public int MaxMag { get => maxMag; set => maxMag = value; }
+        public double PozicioX { get => pozicioX; set => pozicioX = value; }
+        public double PozicioY { get => pozicioY; set => pozicioY = value; }
 
         public string KiIratas() => $"{millimag}\n{memoria}";
         

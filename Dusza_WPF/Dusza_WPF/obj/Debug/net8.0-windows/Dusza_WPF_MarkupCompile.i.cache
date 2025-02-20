@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\beke.tamas\Desktop\IndexOutOfRange-Dusza-main\Dusza_WPF\Dusza_WPF\obj\Debug\net8.0-windows\
+C:\Users\Felhasznalo\Source\Repos\IndexOutOfRange-Dusza\Dusza_WPF\Dusza_WPF\obj\Debug\net8.0-windows\
 Dusza_WPF
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\beke.tamas\Desktop\IndexOutOfRange-Dusza-main\Dusza_WPF\Dusza_WPF\App.xaml
+C:\Users\Felhasznalo\Source\Repos\IndexOutOfRange-Dusza\Dusza_WPF\Dusza_WPF\App.xaml
 131833673460
 
 191594946125
-198-352714763
+1981124507420
 AddApplication.xaml;AddComputer.xaml;ApplicationProperty.xaml;ClusterTracer.xaml;DarkTheme.xaml;DeleteComputer.xaml;EleresMegadas.xaml;LightTheme.xaml;MainWindow.xaml;ManageApplications.xaml;Properties.xaml;RelocateApps.xaml;StartApplication.xaml;
 
-True
+False
 

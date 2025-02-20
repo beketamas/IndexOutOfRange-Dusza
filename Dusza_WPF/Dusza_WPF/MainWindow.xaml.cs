@@ -295,13 +295,13 @@ namespace Dusza_WPF
         public void SzamitogepMappakElerese()
         {
             _szamitogepMappakElerese.Clear();
-            foreach (string eleres in Directory.GetDirectories(Eleres).ToList())
+            if (Directory.GetDirectories(Eleres).ToList().Count != 0)
             {
-                _szamitogepMappakElerese.Add(eleres);
-                //string[] splittelt = eleres.Split('/');
-                //if (splittelt.Last().Contains("szamitogep"))
-                //{
-                //};
+                foreach (var item in Directory.GetDirectories(Eleres).ToList())
+                {
+                    _szamitogepMappakElerese.Add(item);
+                }
+
             }
             //KluszterCucc();
 
@@ -318,7 +318,7 @@ namespace Dusza_WPF
                     int memoria = int.Parse(configFajl[1]);
                     foreach (string file in Directory.GetFiles(item))
                     {
-                        if (!file.Contains(".szamitogep_config") && !file.Contains(".tarhely"))
+                        if (!file.Contains(".szamitogep_config") && !file.Contains(".tarhely") && !file.Contains(".pozicio"))
                         {
                             millimag -= int.Parse(File.ReadAllLines(file)[2]);
                             memoria -= int.Parse(File.ReadAllLines(file)[3]);

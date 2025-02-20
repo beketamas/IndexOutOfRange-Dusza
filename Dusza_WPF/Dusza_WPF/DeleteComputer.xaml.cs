@@ -45,9 +45,13 @@ namespace Dusza_WPF
         public void SzamitogepMappakElerese()
         {
             _szamitogepMappakElerese.Clear();
-            foreach (string eleres in Directory.GetDirectories(_gyoker).ToList())
+            if (Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList().Count != 0)
             {
-                _szamitogepMappakElerese.Add(eleres);
+                foreach (var item in Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList())
+                {
+                    _szamitogepMappakElerese.Add(item);
+                }
+
             }
 
         }
@@ -67,7 +71,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely") && !programok.Contains(".pozicio"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }
@@ -182,7 +186,7 @@ namespace Dusza_WPF
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)
                 {
-                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely"))
+                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely") && !fajl.Contains(".pozicio"))
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         _szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);

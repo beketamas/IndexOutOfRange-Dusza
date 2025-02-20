@@ -87,7 +87,7 @@ namespace Dusza_WPF
                 ProgramokSzetosztasa();
 
             };
-
+            Vizsgal();
         }
         public void ProgramokSzetosztasa()
         {
@@ -110,13 +110,13 @@ namespace Dusza_WPF
                 {
                     programAzonositok.Add(azonosito);
                     gep.ProgramPeldanyAzonositok.Remove(azonosito);
-                    sumMag += int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[2]);
-                    sumMemoria += int.Parse(File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[3]);
+                    sumMag += int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[2]);
+                    sumMemoria += int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[3]);
 
                 }
                 gep.MaxMag = maxMag + sumMag;
                 gep.MaxMemoria = maxMemoria + sumMemoria;
-                File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{maxMag + sumMag}\n{sumMemoria + maxMemoria}");
+                File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{maxMag + sumMag}\n{sumMemoria + maxMemoria}");
 
             }
 
@@ -165,7 +165,7 @@ namespace Dusza_WPF
         public void Rendezes(SzamitogepConfig gep, ProgramFolyamat aktProgram, string eredetiGep)
         {
 
-            var memoriaLines = File.ReadAllLines($"{_gyoker}/{gep.Eleres.Split(@"\").Last()}/.tarhely");
+            var memoriaLines = File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/.tarhely");
 
             if (!marAtrakottProgramok.Contains(_szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve)).Key))
             {
@@ -178,7 +178,7 @@ namespace Dusza_WPF
                 marAtrakottProgramok.Add(_szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve)).Key);
                 gep.MaxMag = millimag;
                 gep.MaxMemoria = memoria;
-                File.WriteAllText(_gyoker + $"/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");                
+                File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");                
             }
 
         }
@@ -206,27 +206,6 @@ namespace Dusza_WPF
                 AddApplication window = new(_gyoker);
                 window.ShowDialog();
                 Betotles();
-                MainWindow.ClasterManager.IsEnabled = false;
-                MainWindow.AddComputer.IsEnabled = false;
-                MainWindow.ManageApps.IsEnabled = false;
-                MainWindow.DeleteComputer.IsEnabled = false;
-                MainWindow.Path.IsEnabled = false;
-                MainWindow.ClasterManager.Opacity = 0.5;
-                MainWindow.AddComputer.Opacity = 0.5;
-                MainWindow.ManageApps.Opacity = 0.5;
-                MainWindow.DeleteComputer.Opacity = 0.5;
-                MainWindow.Path.Opacity = 0.5;
-                MainWindow.ManageApps.Effect = null;
-                StartPulsingAnimation(MainWindow.StartApps);
-                MainWindow.tartoka.Content = new StartApplication(_gyoker);
-                DropShadowEffect dropShadowEffect = new DropShadowEffect
-                {
-                    Opacity = 1,
-                    BlurRadius = 10,
-                    ShadowDepth = 1,
-                    Color = Colors.DarkOrange
-                };
-                MainWindow.StartApps.Effect = dropShadowEffect;
             };
             lbKlaszterProgramok.Items.Add(gomb);
 
@@ -287,15 +266,19 @@ namespace Dusza_WPF
             {
                 if (item.Key.FajlNeve.Contains(valasztottProgram) && !segedLista.Contains(item.Value.Split(@"\").Last()))
                 {
-                    var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{item.Value.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[1]) 
-                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) && x.Value.Contains(item.Value.Split(@"\").Last()))
+                    var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{item.Value.Split(@"\").Last()}/.tarhely")
+                        .Select(x => x).ToList()[1]) 
+                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) 
+                        && x.Value.Contains(item.Value.Split(@"\").Last()))
                         .Sum(x => x.Key.MemoriaEroforras);
 
-                    var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{item.Value.Split(@"\").Last()}/.tarhely").Select(x => x).ToList()[0]) 
-                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) && x.Value.Contains(item.Value.Split(@"\").Last()))
+                    var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{item.Value.Split(@"\").Last()}/.tarhely")
+                        .Select(x => x).ToList()[0]) 
+                        + _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram) 
+                        && x.Value.Contains(item.Value.Split(@"\").Last()))
                         .Sum(x => x.Key.ProcesszorEroforras);
 
-                    File.WriteAllText(_gyoker + $"/{item.Value.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
+                    File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{item.Value.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");
                     segedLista.Add(item.Value.Split(@"\").Last());
                 }
             }
@@ -307,7 +290,7 @@ namespace Dusza_WPF
             var torlendoProgramokGepeken = _szamitogepekenFutoAlkalmazasok.Where(x => x.Key.FajlNeve.Contains(valasztottProgram));
 
             foreach (var item in torlendoProgramokGepeken)
-                File.Delete($"{item.Value}\\{item.Key.FajlNeve}");
+                File.Delete($"{item.Value}\\hasznalatbanLevoGepek\\{item.Key.FajlNeve}");
 
             MessageBox.Show("Sikeres Törlés!");
             SzamitogepMappakElerese();
@@ -323,9 +306,9 @@ namespace Dusza_WPF
 
 
 
-            var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/{gepNev}/.tarhely").Select(x => x).ToList()[1]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.MemoriaEroforras;
-            var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/{gepNev}/.tarhely").Select(x => x).ToList()[0]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.ProcesszorEroforras;
-            File.WriteAllText(_gyoker + $"/{gepNev}/.tarhely", $"{millimag}\n{memoria}");
+            var memoria = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gepNev}/.tarhely").Select(x => x).ToList()[1]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.MemoriaEroforras;
+            var millimag = int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gepNev}/.tarhely").Select(x => x).ToList()[0]) + _szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve == name).Key.ProcesszorEroforras;
+            File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{gepNev}/.tarhely", $"{millimag}\n{memoria}");
 
             File.Delete($"{gep}\\{name}");
             MessageBox.Show("Sikeres Törlés!");
@@ -338,9 +321,13 @@ namespace Dusza_WPF
         public static void SzamitogepMappakElerese()
         {
             _szamitogepMappakElerese.Clear();
-            foreach (string eleres in Directory.GetDirectories(_gyoker).ToList())
+            if (Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList().Count != 0)
             {
-                _szamitogepMappakElerese.Add(eleres);
+                foreach (var item in Directory.GetDirectories(_gyoker + "\\hasznalatbanLevoGepek").ToList())
+                {
+                    _szamitogepMappakElerese.Add(item);
+                }
+
             }
 
         }
@@ -360,7 +347,7 @@ namespace Dusza_WPF
 
                     foreach (var programok in Directory.GetFiles(item))
                     {
-                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely"))
+                        if (!programok.Contains(".szamitogep_config") && !programok.Contains(".tarhely") && !programok.Contains(".pozicio"))
                         {
                             gep.ProgramPeldanyAzonositok.Add(programok.Split("\\").Last());
                         }
@@ -393,7 +380,7 @@ namespace Dusza_WPF
                 List<string> fajlokNevei = Directory.GetFiles(item).ToList();
                 foreach (var fajl in fajlokNevei)
                 {
-                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely"))
+                    if (!fajl.Contains(".szamitogep_config") && !fajl.Contains(".tarhely") && !fajl.Contains(".pozicio"))
                     {
                         string[] fajlElemek = File.ReadAllLines(fajl);
                         _szamitogepekenFutoAlkalmazasok.Add(new ProgramFolyamat(Convert.ToDateTime(fajlElemek[0]), fajlElemek[1], Convert.ToInt32(fajlElemek[2]), Convert.ToInt32(fajlElemek[3]), fajl.Split(@"\").Last()), item);
@@ -425,6 +412,26 @@ namespace Dusza_WPF
                 if (i < futniaKene)
                 {
                     StartPulsingAnimation(MainWindow.StartApps);
+                    MainWindow.ClasterManager.IsEnabled = false;
+                    MainWindow.AddComputer.IsEnabled = false;
+                    MainWindow.ManageApps.IsEnabled = false;
+                    MainWindow.DeleteComputer.IsEnabled = false;
+                    MainWindow.Path.IsEnabled = false;
+                    MainWindow.ClasterManager.Opacity = 0.5;
+                    MainWindow.AddComputer.Opacity = 0.5;
+                    MainWindow.ManageApps.Opacity = 0.5;
+                    MainWindow.DeleteComputer.Opacity = 0.5;
+                    MainWindow.Path.Opacity = 0.5;
+                    MainWindow.tartoka.Content = new StartApplication(_gyoker);
+                    DropShadowEffect dropShadowEffect = new DropShadowEffect
+                    {
+                        Opacity = 1,
+                        BlurRadius = 10,
+                        ShadowDepth = 1,
+                        Color = Colors.DarkOrange
+                    };
+                    MainWindow.StartApps.Effect = dropShadowEffect;
+                    MainWindow.ManageApps.Effect = null;
                 }
                 else if(i == futniaKene)
                 {
