@@ -5,7 +5,7 @@
 ## A Program Indítás
 
 - **1.** A programot a `Dusza_WPF` mappában található `Dusza_WPF.sln` fájlal lehet elindítani.
-- **2.** Illetve a github repositoryban megtalálható `Releases` fülnél a `Exe2` taggal ellátott fájlt kell letölteni, (kicsomagolni) és az abban megtalálható `Dusza_WPF.exe` fájl elindításával lehet kipróbálni.
+- **2.** Illetve a github repositoryban megtalálható `Releases` fülnél a `Exe2` taggal ellátott fájlt kell letölteni, az abban található `win-x86.rar` fájlt kicsomaglin, és az abban megtalálható `Dusza_WPF.exe` fájl elindításával lehet kipróbálni.
 
 ## Teszt Klaszter Kipróbálása
 
