@@ -76,7 +76,7 @@ namespace Dusza_WPF
             {
                 if (lbKlaszterProgramok.SelectedItem != null)
                 {
-                    ApplicationProperty window = new(_klaszterLista.Where(x => x.ProgramName == lbKlaszterProgramok.SelectedItem.ToString()).First(), _gyoker);
+                    ApplicationProperty window = new(_klaszterLista.Where(x => x.ProgramName == lbKlaszterProgramok.SelectedItem.ToString().Split(" ")[0]).First(), _gyoker);
                     window.ShowDialog();
                     Betotles();
                 }

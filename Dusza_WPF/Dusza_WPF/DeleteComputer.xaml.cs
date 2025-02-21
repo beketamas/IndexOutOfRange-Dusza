@@ -96,7 +96,7 @@ namespace Dusza_WPF
 
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria+sumMemoria}MB | Millimag: {sumMillimag}/{gep.Millimag+sumMillimag}",
+                        Text = $"{y} | Tárhely: {sumMemoria}MB/{gep.Memoria}MB | Millimag: {sumMillimag}/{gep.Millimag}",
                         Margin = new Thickness(0, 0, 10, 0) // Add some space between text and image
                     };
 
