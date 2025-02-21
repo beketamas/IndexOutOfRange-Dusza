@@ -160,6 +160,7 @@ namespace Dusza_WPF
                     this.klaszter.Add(gep);
                 }
             }
+
             Vizsgal();
         }
         public void Vizsgal()
@@ -217,6 +218,7 @@ namespace Dusza_WPF
                         };
                         MainWindow.ManageApps.Effect = dropShadowEffect;
                         MainWindow.ClasterManager.Effect = null;
+                        break;
                     }
                 }
                 
@@ -325,6 +327,7 @@ namespace Dusza_WPF
                     gep.Background = new SolidColorBrush(Colors.Red);
                 }
             }
+
             Vizsgal();
         }
         #endregion

@@ -92,6 +92,7 @@ namespace Dusza_WPF
                         MainWindow.tartoka.Content = new ManageApplications(_gyoker);
                         hibak++;
                         ManageApplications.error.Items.Add($"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!");
+                        
                     }
                 }
                 if (hibak == 0)

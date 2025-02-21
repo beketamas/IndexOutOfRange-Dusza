@@ -87,6 +87,9 @@ namespace Dusza_WPF
                 ProgramokSzetosztasa();
 
             };
+            SzamitogepMappakElerese();
+            SzamitogepConfigok();
+            KluszterCucc();
             Vizsgal();
         }
         public void ProgramokSzetosztasa()
@@ -114,8 +117,8 @@ namespace Dusza_WPF
                     sumMemoria += int.Parse(File.ReadAllLines($"{_gyoker}/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/{azonosito}")[3]);
 
                 }
-                gep.MaxMag = maxMag + sumMag;
-                gep.MaxMemoria = maxMemoria + sumMemoria;
+                gep.JelenlegiMag = maxMag + sumMag;
+                gep.JelenlegiMemoria = maxMemoria + sumMemoria;
                 File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{maxMag + sumMag}\n{sumMemoria + maxMemoria}");
 
             }
@@ -128,12 +131,12 @@ namespace Dusza_WPF
                 SzamitogepConfig? gep;
                 if (aktProgram.MemoriaEroforras < aktProgram.ProcesszorEroforras)
                 {
-                    gep = _szamitogepConfigok?.OrderByDescending(x => x.MaxMag)
+                    gep = _szamitogepConfigok?.OrderByDescending(x => x.JelenlegiMag)
                     .FirstOrDefault();
                 }
                 else
                 {
-                    gep = _szamitogepConfigok?.OrderByDescending(x => x.MaxMemoria)
+                    gep = _szamitogepConfigok?.OrderByDescending(x => x.JelenlegiMemoria)
                     .FirstOrDefault();
                 }
 
@@ -176,8 +179,8 @@ namespace Dusza_WPF
                     .Sum(x => x.Key.ProcesszorEroforras);
 
                 marAtrakottProgramok.Add(_szamitogepekenFutoAlkalmazasok.First(x => x.Key.FajlNeve.Contains(aktProgram.FajlNeve)).Key);
-                gep.MaxMag = millimag;
-                gep.MaxMemoria = memoria;
+                gep.JelenlegiMag = millimag;
+                gep.JelenlegiMemoria = memoria;
                 File.WriteAllText(_gyoker + $"/hasznalatbanLevoGepek/{gep.Eleres.Split(@"\").Last()}/.tarhely", $"{millimag}\n{memoria}");                
             }
 
@@ -312,10 +315,10 @@ namespace Dusza_WPF
 
             File.Delete($"{gep}\\{name}");
             MessageBox.Show("Sikeres Törlés!");
-            Vizsgal();
             SzamitogepMappakElerese();
             SzamitogepConfigok();
             ProgramokBeolvasása();
+            Vizsgal();
             
         }
         public static void SzamitogepMappakElerese()
@@ -407,6 +410,8 @@ namespace Dusza_WPF
         {
             if (_szamitogepConfigok.Count > 0)
             {
+                int hibak = 0;
+
                 error.Items.Clear();
                 foreach (var item in _klaszterLista)
                 {
@@ -435,9 +440,11 @@ namespace Dusza_WPF
                         };
                         MainWindow.StartApps.Effect = dropShadowEffect;
                         MainWindow.ManageApps.Effect = null;
+                        hibak++;
+
                     }
 
-                    if (i > futniaKene)
+                    else if (i > futniaKene)
                     {
                         StartPulsingAnimation(MainWindow.ManageApps);
                         MainWindow.ClasterManager.IsEnabled = false;
@@ -461,9 +468,11 @@ namespace Dusza_WPF
                         MainWindow.ManageApps.Effect = dropShadowEffect;
                         MainWindow.ClasterManager.Effect = null;
                         error.Items.Add($"A(z) {item.ProgramName} csak {futniaKene} példányban futhat!");
+                        hibak++;
+
                     }
 
-                    else if(i == futniaKene)
+                    if(hibak == 0)
                     {
                         ResetButtonAnimation(MainWindow.StartApps);
                         MainWindow.ClasterManager.IsEnabled = true;

@@ -14,8 +14,8 @@ namespace DuszaProg_IndexOutOfRange
         string eleres;
         int millimag;
         int memoria;
-        int maxMemoria;
-        int maxMag;
+        int jelenlegiMemoria;
+        int jelenlegiMag;
         private List<string> programPeldanyAzonositok = [];
         double pozicioX = 0;
         double pozicioY = 0;
@@ -30,16 +30,16 @@ namespace DuszaProg_IndexOutOfRange
             Width = 100;
             Height = 30;
             FontSize = 15;
-            this.maxMemoria = maxMemoria;
-            this.maxMag = maxMag;
+            this.jelenlegiMemoria = maxMemoria;
+            this.jelenlegiMag = maxMag;
         }
 
         public int Millimag { get => millimag; set => millimag = value; }
         public int Memoria { get => memoria; set => memoria = value; }
         public string Eleres { get => eleres; set => eleres = value; }
         public List<string> ProgramPeldanyAzonositok { get => programPeldanyAzonositok; set => programPeldanyAzonositok = value; }
-        public int MaxMemoria { get => maxMemoria; set => maxMemoria = value; }
-        public int MaxMag { get => maxMag; set => maxMag = value; }
+        public int JelenlegiMemoria { get => jelenlegiMemoria; set => jelenlegiMemoria = value; }
+        public int JelenlegiMag { get => jelenlegiMag; set => jelenlegiMag = value; }
         public double PozicioX { get => pozicioX; set => pozicioX = value; }
         public double PozicioY { get => pozicioY; set => pozicioY = value; }
 
