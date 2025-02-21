@@ -1,4 +1,0 @@
-gomb betűmértek fixálása
-nagyobb marginok/paddingok
-programok neve után szerepljen hogy mennyi fut belőle
-.tarhely fálj törlése
